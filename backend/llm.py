@@ -1,22 +1,20 @@
-"""阿里云百炼 LLM 调用，兼容 OpenAI 协议"""
+"""本地 OpenAI 兼容 LLM 调用（Ollama 等）"""
 from collections.abc import Generator
 from urllib.parse import urlparse
 from openai import OpenAI
 from .config import get_config
 
-SYSTEM_PROMPT = """你是齐齐哈尔大学软件工程专业的智能问答助手"小软"。
+SYSTEM_PROMPT = """你是齐齐哈尔大学软件工程专业的智能问答助手“小软”。
 
-你的职责：
-1. 基于提供的【参考资料】回答学生的问题
-2. 回答要准确、友好、贴近学生，可以用自己的语言组织，但内容必须基于参考资料
-3. 如果参考资料不足以完整回答问题，请诚实告知，并建议学生联系老师获取更详细的信息
-4. 绝对不允许编造参考资料中没有的事实、数据或信息
-5. 回答时可以适当补充一些鼓励性的话语
-6. 回答尽量简洁精炼，直击要点，避免冗长
+回答规则：
+1. 若提供了【参考资料】，优先依据资料回答，避免与资料冲突。
+2. 若未提供资料或资料不足，可以基于通用知识回答，让用户先得到可执行建议。
+3. 涉及校内具体制度、时间、收费、政策等，若资料不足请提醒“以学校最新通知为准”，不要编造精确数字。
+4. 语气自然、温和、像学长学姐沟通，减少官话和模板腔。
+5. 回答尽量清晰：先结论，再补充 1-3 条要点；避免长篇空话。
+6. 不确定时直接说明不确定，并给出下一步建议（如咨询学院老师/官网通知）。
 
-注意事项：
-- 你只能回答与齐齐哈尔大学软件工程专业相关的问题
-- 对于完全无关的问题，礼貌地告知学生这超出了你的知识范围"""
+你不是冷冰冰的机器人，要让用户感到“有帮助、有温度、好理解”。"""
 
 _client: OpenAI | None = None
 _client_cfg_hash: str = ""
@@ -29,23 +27,18 @@ def _is_local_base_url(base_url: str) -> bool:
 
 
 def resolve_api_key(cfg: dict) -> str:
-    api_key = (cfg.get("api_key") or "").strip()
-    if api_key:
-        return api_key
     base_url = (cfg.get("base_url") or "").strip()
-    if base_url and _is_local_base_url(base_url):
-        # 本地 OpenAI 兼容服务通常只需要一个占位 key。
-        return "local-api-key"
-    return ""
+    if not base_url or not _is_local_base_url(base_url):
+        raise RuntimeError("当前仅支持本地模型，请将 Base URL 设置为本地地址。")
+    # 本地 OpenAI 兼容服务通常只需要一个占位 key。
+    return "local-api-key"
 
 
 def _get_client() -> tuple[OpenAI, dict]:
     global _client, _client_cfg_hash
     cfg = get_config()
     api_key = resolve_api_key(cfg)
-    if not api_key:
-        raise RuntimeError("未配置 API Key，请在管理后台填写后重试。")
-    cfg_hash = f"{api_key}__{cfg.get('base_url','')}"
+    cfg_hash = f"{api_key}__{cfg.get('base_url','')}__{cfg.get('model','')}"
     if _client is None or cfg_hash != _client_cfg_hash:
         _client = OpenAI(
             api_key=api_key,
@@ -58,17 +51,24 @@ def _get_client() -> tuple[OpenAI, dict]:
 
 
 def _build_messages(question: str, context_items: list[dict]) -> list[dict]:
-    context_text = "\n\n".join(
-        f"问：{item['question']}\n答：{item['answer']}"
-        for item in context_items
-    )
-    user_message = f"""【参考资料】
+    if context_items:
+        context_text = "\n\n".join(
+            f"问：{item['question']}\n答：{item['answer']}"
+            for item in context_items
+        )
+        user_message = f"""【参考资料】
 {context_text}
 
 【学生问题】
 {question}
 
-请基于以上参考资料简洁地回答学生的问题。"""
+请结合参考资料回答，语气自然一些，不要太生硬。"""
+    else:
+        user_message = f"""【学生问题】
+{question}
+
+当前没有命中可用的校内知识库资料，请先基于你的通用知识给出有帮助的回答。
+如果问题涉及校内具体政策，请提醒“以学校最新通知为准”。"""
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_message},

@@ -46,6 +46,17 @@ const WHISPERS = [
   "心里装了个人，内存一直占满",
 ];
 
+const THINKING_WHISPERS = [
+  "夹心正在认真想答案...",
+  "偷偷汇报：彤今天也很好看",
+  "这题不难，给我 1 分钟",
+  "想把答案讲清楚一点给你",
+  "先别急，正在把重点拎出来",
+  "有些喜欢要藏起来，有些答案要说出来",
+  "小软在思考，你先深呼吸一下",
+  "彤是变量名里最甜的那个",
+];
+
 const ETA_STORAGE_KEY = "avg-response-ms";
 
 function getEstimate(): number {
@@ -92,6 +103,9 @@ function ThemeToggle() {
 
 function ThinkingBubble({ startTime }: { startTime: number }) {
   const [elapsed, setElapsed] = useState(0);
+  const [whisperIndex, setWhisperIndex] = useState(() =>
+    Math.floor(Math.random() * THINKING_WHISPERS.length)
+  );
   const estimate = useMemo(() => getEstimate(), []);
 
   useEffect(() => {
@@ -100,6 +114,13 @@ function ThinkingBubble({ startTime }: { startTime: number }) {
     }, 300);
     return () => clearInterval(timer);
   }, [startTime]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWhisperIndex((prev) => (prev + 1) % THINKING_WHISPERS.length);
+    }, 2600);
+    return () => clearInterval(timer);
+  }, []);
 
   const elapsedSec = Math.floor(elapsed / 1000);
   const estSec = Math.ceil(estimate / 1000);
@@ -126,6 +147,9 @@ function ThinkingBubble({ startTime }: { startTime: number }) {
             Thinking<span className="text-[--text-muted]">{` · ${timeText}`}</span>
           </span>
         </div>
+        <p className="mt-1 pl-6 text-[10px] text-[--text-muted] opacity-65 italic select-none">
+          {THINKING_WHISPERS[whisperIndex]}
+        </p>
       </div>
     </div>
   );

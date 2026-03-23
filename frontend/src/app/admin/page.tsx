@@ -1,20 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const AVAILABLE_MODELS = [
-  // 云端模型
-  { id: "qwen3.5-plus", name: "Qwen 3.5 Plus", desc: "文本生成、深度思考、视觉理解" },
-  { id: "qwen3-max-2026-01-23", name: "Qwen 3 Max", desc: "文本生成、深度思考" },
-  { id: "qwen3-coder-next", name: "Qwen 3 Coder Next", desc: "文本生成" },
-  { id: "qwen3-coder-plus", name: "Qwen 3 Coder Plus", desc: "文本生成" },
-  { id: "glm-5", name: "GLM-5 (智谱)", desc: "文本生成、深度思考" },
-  { id: "glm-4.7", name: "GLM-4.7 (智谱)", desc: "文本生成、深度思考" },
-  { id: "kimi-k2.5", name: "Kimi K2.5", desc: "文本生成、深度思考、视觉理解" },
-  { id: "MiniMax-M2.5", name: "MiniMax M2.5", desc: "文本生成、深度思考" },
-  // 本地轻量模型（OpenAI 兼容服务，如 Ollama）
   { id: "qwen2.5:7b", name: "Qwen 2.5 7B（本地）", desc: "速度/效果平衡，推荐首选" },
   { id: "qwen2.5:3b", name: "Qwen 2.5 3B（本地）", desc: "更快更省显存，但效果略降" },
   { id: "llama3.1:8b", name: "Llama 3.1 8B（本地）", desc: "综合能力强，资源占用略高" },
@@ -23,7 +12,6 @@ const AVAILABLE_MODELS = [
 type Tab = "connection" | "knowledge" | "other";
 
 interface Config {
-  api_key: string;
   base_url: string;
   model: string;
   teacher_name: string;
@@ -36,10 +24,16 @@ interface KnowledgeStats {
   count: number;
 }
 
+interface KnowledgePreviewItem {
+  id: number;
+  question: string;
+  answer: string;
+}
+
 const TOKEN_KEY = "admin-token";
+const LOCAL_BASE_URL_HINT = "http://127.0.0.1:11435/v1";
 
 export default function AdminPage() {
-  const router = useRouter();
   const [token, setToken] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -47,7 +41,6 @@ export default function AdminPage() {
 
   const [config, setConfig] = useState<Config | null>(null);
   const [form, setForm] = useState({
-    api_key: "",
     base_url: "",
     model: "",
     teacher_name: "",
@@ -70,6 +63,9 @@ export default function AdminPage() {
   const [knowledgeMessage, setKnowledgeMessage] = useState("");
   const [knowledgeError, setKnowledgeError] = useState("");
   const [knowledgeInputKey, setKnowledgeInputKey] = useState(0);
+  const [knowledgePreview, setKnowledgePreview] = useState<KnowledgePreviewItem[]>([]);
+  const [knowledgePreviewLoading, setKnowledgePreviewLoading] = useState(false);
+  const [knowledgeQuery, setKnowledgeQuery] = useState("");
 
   const [activeTab, setActiveTab] = useState<Tab>("connection");
 
@@ -93,9 +89,37 @@ export default function AdminPage() {
     }
   };
 
+  const fetchKnowledgePreview = async (adminToken: string) => {
+    setKnowledgePreviewLoading(true);
+    try {
+      const res = await fetch("/api/admin/knowledge/preview?limit=120", {
+        headers: { "X-Admin-Token": adminToken },
+      });
+      if (res.status === 401) return;
+      const data = await res.json();
+      if (res.ok) {
+        setKnowledgePreview(Array.isArray(data.items) ? data.items : []);
+      }
+    } catch {
+      // 忽略预览加载失败，避免影响上传功能
+    } finally {
+      setKnowledgePreviewLoading(false);
+    }
+  };
+
+  const filteredPreview = useMemo(() => {
+    const q = knowledgeQuery.trim().toLowerCase();
+    if (!q) return knowledgePreview;
+    return knowledgePreview.filter((item) => {
+      const text = `${item.question} ${item.answer}`.toLowerCase();
+      return text.includes(q);
+    });
+  }, [knowledgePreview, knowledgeQuery]);
+
   useEffect(() => {
     if (!token) return;
     fetchKnowledgeStats(token);
+    fetchKnowledgePreview(token);
     fetch("/api/admin/config", {
       headers: { "X-Admin-Token": token },
     })
@@ -111,9 +135,8 @@ export default function AdminPage() {
         if (!data) return;
         setConfig(data);
         setForm({
-          api_key: "",
-          base_url: data.base_url || "",
-          model: data.model || "qwen3.5-plus",
+          base_url: data.base_url || LOCAL_BASE_URL_HINT,
+          model: data.model || "qwen2.5:3b",
           teacher_name: data.teacher_name || "",
           teacher_contact: data.teacher_contact || "",
           teacher_contact_type: data.teacher_contact_type || "其他",
@@ -151,9 +174,11 @@ export default function AdminPage() {
     localStorage.removeItem(TOKEN_KEY);
     setConfig(null);
     setKnowledgeStats(null);
+    setKnowledgePreview([]);
     setKnowledgeFile(null);
     setKnowledgeMessage("");
     setKnowledgeError("");
+    setKnowledgeQuery("");
   };
 
   const handleSave = async () => {
@@ -162,8 +187,7 @@ export default function AdminPage() {
     setError("");
 
     const updates: Record<string, string | number> = {};
-    if (form.api_key) updates.api_key = form.api_key;
-    if (form.base_url) updates.base_url = form.base_url;
+    updates.base_url = form.base_url || LOCAL_BASE_URL_HINT;
     if (form.model) updates.model = form.model;
     if (form.teacher_name) updates.teacher_name = form.teacher_name;
     if (form.teacher_contact) updates.teacher_contact = form.teacher_contact;
@@ -183,9 +207,7 @@ export default function AdminPage() {
       const data = await res.json();
       if (res.ok) {
         setConfig(data.config);
-        setForm((prev) => ({ ...prev, api_key: "" }));
-        setMessage("配置保存成功，正在跳转...");
-        setTimeout(() => router.push("/"), 1200);
+        setMessage("配置保存成功");
       } else {
         setError(data.detail || "保存失败");
       }
@@ -236,6 +258,8 @@ export default function AdminPage() {
         setKnowledgeStats({ count: data.count ?? 0 });
         setKnowledgeFile(null);
         setKnowledgeInputKey((k) => k + 1);
+        fetchKnowledgePreview(token);
+        fetchKnowledgeStats(token);
       } else {
         setKnowledgeError(data.detail || "知识库上传失败");
       }
@@ -246,7 +270,8 @@ export default function AdminPage() {
     }
   };
 
-  const inputClass = "w-full sf-input px-4 py-2.5 text-sm";
+  const inputClass =
+    "w-full sf-input px-4 py-2.5 text-sm border border-[color:var(--border-subtle)]";
 
   if (!token) {
     return (
@@ -321,7 +346,7 @@ export default function AdminPage() {
               系统管理
             </h1>
             <p className="text-sm text-[--text-muted]">
-              配置 AI 模型、API 密钥和老师联系方式
+              本系统仅使用本地模型（不再使用远程 API Key）
             </p>
           </div>
 
@@ -363,29 +388,18 @@ export default function AdminPage() {
 
             {activeTab === "connection" && (
               <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-[--text-secondary] mb-1.5">
-                    API Key
-                  </label>
-                  <input
-                    type="password"
-                    value={form.api_key}
-                    onChange={(e) =>
-                      setForm((p) => ({ ...p, api_key: e.target.value }))
-                    }
-                    placeholder={
-                      config?.api_key ? "已设置（留空保持不变）" : "输入 API Key"
-                    }
-                    className={inputClass}
-                  />
-                  <p className="mt-1 text-xs text-[--text-muted]">
-                    远程模型必填；本地 OpenAI 兼容服务（localhost/127.0.0.1）可留空。
+                <div className="p-3 rounded-xl text-sm border border-[color:var(--border-subtle)] bg-[var(--bg-card)]">
+                  <p className="text-[--text-primary] font-medium">
+                    已锁定本地部署模式
+                  </p>
+                  <p className="text-[--text-muted] mt-1 text-xs">
+                    为节省学校成本，系统已取消远程 API Key，仅使用本地 Ollama（或其他本地 OpenAI 兼容服务）。
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-[--text-secondary] mb-1.5">
-                    API Base URL
+                    本地服务 Base URL
                   </label>
                   <input
                     type="text"
@@ -393,11 +407,11 @@ export default function AdminPage() {
                     onChange={(e) =>
                       setForm((p) => ({ ...p, base_url: e.target.value }))
                     }
-                    placeholder="例如：https://coding.dashscope.aliyuncs.com/v1 或 http://127.0.0.1:11435/v1"
+                    placeholder={LOCAL_BASE_URL_HINT}
                     className={inputClass}
                   />
                   <p className="mt-1 text-xs text-[--text-muted]">
-                    本地模型推荐：`http://127.0.0.1:11435/v1`
+                    推荐使用：`http://127.0.0.1:11435/v1`
                   </p>
                 </div>
 
@@ -436,7 +450,7 @@ export default function AdminPage() {
                   </div>
                   <div className="mt-3">
                     <label className="block text-xs text-[--text-muted] mb-1.5">
-                      或手动输入模型 ID（推荐）
+                      或手动输入本地模型 ID
                     </label>
                     <input
                       type="text"
@@ -457,7 +471,7 @@ export default function AdminPage() {
                     className="px-4 py-2.5 text-sm font-medium rounded-xl text-[--accent] disabled:opacity-40 transition-all"
                     style={{ border: "2px solid var(--accent)" }}
                   >
-                    {testing ? "测试中..." : "测试 API 连接"}
+                    {testing ? "测试中..." : "测试本地模型连接"}
                   </button>
                   {testResult && (
                     <span
@@ -473,7 +487,7 @@ export default function AdminPage() {
             )}
 
             {activeTab === "knowledge" && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {knowledgeError && (
                   <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400">
                     {knowledgeError}
@@ -485,19 +499,34 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                <div>
-                  <h2 className="text-base font-semibold text-[--text-primary] mb-2">
-                    知识库文件上传
-                  </h2>
-                  <p className="text-sm text-[--text-muted] mb-4">
-                    支持上传 `.xlsx`、`.json`、`.csv`。上传成功后会立即重建检索索引并生效。
-                  </p>
-                  <div className="text-sm text-[--text-secondary] mb-3">
-                    当前知识库条目：
-                    <span className="text-[--text-primary] font-semibold ml-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-4">
+                    <p className="text-xs text-[--text-muted]">知识库总条目</p>
+                    <p className="text-2xl font-semibold text-[--text-primary] mt-1">
                       {knowledgeStats?.count ?? "-"}
-                    </span>
+                    </p>
+                    <p className="text-[11px] text-[--text-muted] mt-2">
+                      上传新文件后会自动重建索引，立即生效。
+                    </p>
                   </div>
+                  <div className="rounded-xl border border-[color:var(--border-subtle)] bg-[var(--bg-card)] p-4">
+                    <p className="text-xs text-[--text-muted]">当前上传文件</p>
+                    <p className="text-sm text-[--text-primary] mt-1 break-all">
+                      {knowledgeFile ? knowledgeFile.name : "未选择文件"}
+                    </p>
+                    <p className="text-[11px] text-[--text-muted] mt-2">
+                      支持 `.xlsx`、`.json`、`.csv`
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-[color:var(--border-subtle)] p-4">
+                  <h2 className="text-base font-semibold text-[--text-primary] mb-2">
+                    上传知识库文件
+                  </h2>
+                  <p className="text-xs text-[--text-muted] mb-3">
+                    建议优先使用“问题/答案”列模板，上传后会覆盖旧知识库。
+                  </p>
                   <input
                     key={knowledgeInputKey}
                     type="file"
@@ -505,22 +534,65 @@ export default function AdminPage() {
                     onChange={(e) => setKnowledgeFile(e.target.files?.[0] ?? null)}
                     className={inputClass}
                   />
-                  <p className="mt-2 text-xs text-[--text-muted]">
-                    建议优先使用带“问题/答案”列的文件模板。
-                  </p>
+                  <div className="flex items-center justify-between gap-3 mt-3">
+                    <button
+                      onClick={handleUploadKnowledge}
+                      disabled={knowledgeUploading || !knowledgeFile}
+                      className="px-4 py-2.5 text-sm font-medium rounded-xl bg-[--accent] text-white disabled:opacity-40 transition-opacity"
+                    >
+                      {knowledgeUploading ? "上传并重建中..." : "上传并立即生效"}
+                    </button>
+                    <span className="text-[11px] text-[--text-muted]">
+                      {knowledgeFile ? "已就绪，可上传" : "请选择文件"}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3 pt-1">
-                  <button
-                    onClick={handleUploadKnowledge}
-                    disabled={knowledgeUploading || !knowledgeFile}
-                    className="px-4 py-2.5 text-sm font-medium rounded-xl bg-[--accent] text-white disabled:opacity-40 transition-opacity"
-                  >
-                    {knowledgeUploading ? "上传并重建中..." : "上传并立即生效"}
-                  </button>
-                  <span className="text-xs text-[--text-muted]">
-                    {knowledgeFile ? `已选择：${knowledgeFile.name}` : "未选择文件"}
-                  </span>
+                <div className="rounded-xl border border-[color:var(--border-subtle)] p-4">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <h2 className="text-base font-semibold text-[--text-primary]">
+                      知识内容预览
+                    </h2>
+                    <button
+                      onClick={() => fetchKnowledgePreview(token)}
+                      disabled={knowledgePreviewLoading}
+                      className="px-3 py-1.5 text-xs rounded-lg border border-[color:var(--border-subtle)] text-[--text-secondary] hover:text-[--text-primary] transition-colors disabled:opacity-50"
+                    >
+                      {knowledgePreviewLoading ? "刷新中..." : "刷新列表"}
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={knowledgeQuery}
+                    onChange={(e) => setKnowledgeQuery(e.target.value)}
+                    placeholder="按问题或答案关键字筛选..."
+                    className={inputClass}
+                  />
+                  <p className="text-[11px] text-[--text-muted] mt-2">
+                    显示 {filteredPreview.length} 条（预览上限 120 条）
+                  </p>
+
+                  <div className="mt-3 max-h-72 overflow-y-auto rounded-lg border border-[color:var(--border-subtle)]">
+                    {filteredPreview.length === 0 ? (
+                      <div className="px-4 py-8 text-sm text-center text-[--text-muted]">
+                        暂无可展示的知识条目
+                      </div>
+                    ) : (
+                      filteredPreview.map((item) => (
+                        <div
+                          key={`${item.id}-${item.question}`}
+                          className="px-4 py-3 border-b border-[color:var(--border-subtle)] last:border-b-0"
+                        >
+                          <p className="text-sm font-medium text-[--text-primary]">
+                            Q：{item.question}
+                          </p>
+                          <p className="text-xs text-[--text-secondary] mt-1">
+                            A：{item.answer}
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -611,8 +683,16 @@ export default function AdminPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="w-full py-3.5 bg-[--accent] text-white font-semibold text-[15px] rounded-xl hover:opacity-85 disabled:opacity-40 transition-opacity shadow-sm"
-                  style={{ boxShadow: "0 2px 8px rgba(0, 122, 255, 0.25)" }}
+                  className={`w-full py-3.5 font-semibold text-[15px] rounded-xl transition-all shadow-sm ${
+                    saving
+                      ? "bg-[var(--bg-card)] text-[--text-secondary] border border-[color:var(--border-subtle)] cursor-not-allowed"
+                      : "bg-[--accent] text-white hover:opacity-90"
+                  }`}
+                  style={
+                    saving
+                      ? { boxShadow: "none" }
+                      : { boxShadow: "0 2px 8px rgba(0, 122, 255, 0.25)" }
+                  }
                 >
                   {saving ? "保存中..." : "保存配置"}
                 </button>

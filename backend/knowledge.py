@@ -186,6 +186,24 @@ def get_knowledge_stats() -> dict:
     return {"count": len(_qa_data)}
 
 
+def get_knowledge_preview(limit: int = 80) -> dict:
+    if _vectorizer is None or _tfidf_matrix is None:
+        load_knowledge()
+
+    safe_limit = max(1, min(int(limit), 300))
+    items: list[dict] = []
+    for item in _qa_data[:safe_limit]:
+        answer = str(item.get("answer", "")).strip()
+        short_answer = answer if len(answer) <= 120 else (answer[:120] + "...")
+        items.append({
+            "id": item.get("id"),
+            "question": str(item.get("question", "")).strip(),
+            "answer": short_answer,
+        })
+
+    return {"count": len(_qa_data), "items": items}
+
+
 def load_knowledge():
     global _qa_data, _vectorizer, _tfidf_matrix, _question_tokens
     with open(DATA_PATH, "r", encoding="utf-8") as f:
