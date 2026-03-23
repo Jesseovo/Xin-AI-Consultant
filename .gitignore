@@ -1,0 +1,12 @@
+.env
+node_modules/
+.next/
+__pycache__/
+*.pyc
+backend/data/runtime_config.json
+backend/.pip_cache/
+.cursor/
+*.egg-info/
+dist/
+build/
+.cache/
