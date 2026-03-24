@@ -3,7 +3,12 @@ import json
 import os
 import openpyxl
 
-XLSX_PATH = os.path.join(os.path.dirname(__file__), "..", "需要准备的数据-吴迪260313.xlsx")
+XLSX_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "..",
+    "data-source",
+    "需要准备的数据-吴迪260313.xlsx",
+)
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "data", "qa_knowledge.json")
 
 

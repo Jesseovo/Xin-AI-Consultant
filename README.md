@@ -1,67 +1,90 @@
 # Xin AI Consultant
 
-齐齐哈尔大学软件工程专业智能问答系统（本地模型版）。
+齐齐哈尔大学软件工程专业智能问答系统（本地模型优先版）。
 
-本项目聚焦三件事：
-- 学生提问时得到自然、可用、不过度模板化的回答
-- 知识库可在管理后台直接上传并即时生效
-- 全链路支持本地部署（默认 Ollama），减少云端 API 成本
+本仓库目标非常明确：
 
----
-
-## 功能亮点
-
-- 本地模型优先：默认走 `Ollama + OpenAI 兼容接口`，不依赖远程 API Key
-- 检索 + 生成：TF-IDF + 关键词混合检索，命中知识库时优先依据资料回答
-- 非知识库问题可答：未命中知识库时，模型仍可给出通用建议
-- 管理后台可维护：模型配置、连接测试、知识库上传、知识预览、阈值调节
-- 知识库即时更新：支持 `.xlsx/.json/.csv` 上传后立即重建索引
-- 项目内缓存：模型与依赖缓存落在项目目录，便于迁移和清理
+- 让学生提问能得到自然、可执行、不过度模板化的回答
+- 让知识库可以在后台直接上传并立即生效
+- 让学校/团队可以低成本长期维护（默认本地模型，不依赖云端 Key）
 
 ---
 
-## 技术栈
+## 你应该先读哪份文档
+
+为避免文档过多，`docs/` 只保留 2 份核心文档：
+
+1. [`docs/DEPLOYMENT_AND_USAGE_GUIDE.md`](./docs/DEPLOYMENT_AND_USAGE_GUIDE.md)  
+   零基础部署与日常使用手册（从安装到排错，按步骤照做即可）
+2. [`docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md`](./docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md)  
+   教你从零做一个同类系统（从需求到上线）
+
+如果你只是想先跑起来，请先看第 1 份。
+
+---
+
+## 系统能力概览
+
+- 本地模型优先：默认通过 `Ollama + OpenAI Compatible API`
+- 检索增强回答：TF-IDF + 关键词混合检索，命中资料优先依据资料
+- 通用问题可答：未命中知识库时可给通用建议
+- 管理后台完备：模型配置、连接测试、知识库上传、知识预览
+- 文件上传即生效：支持 `.xlsx/.json/.csv`
+- 缓存本地化：模型/依赖缓存统一写入项目目录，便于迁移和清理
+
+---
+
+## 技术架构
 
 - 前端：Next.js 15 + TypeScript + TailwindCSS
 - 后端：FastAPI + Uvicorn
-- 模型：Ollama（OpenAI Compatible）
 - 检索：scikit-learn TF-IDF + jieba
-- 数据：`backend/data/qa_knowledge.json`
+- 模型：Ollama（本地）
+- 数据文件：`backend/data/qa_knowledge.json`
 
 ---
 
-## 目录结构
+## 目录结构（当前）
 
 ```text
-demo2-QA-system/
-├─ frontend/                         # Next.js 前端
-├─ backend/                          # FastAPI 后端
-│  ├─ main.py                        # API 入口
-│  ├─ llm.py                         # 模型调用逻辑
-│  ├─ knowledge.py                   # 知识库导入与检索
-│  ├─ config.py                      # 运行时配置
-│  └─ data/qa_knowledge.json         # 当前知识库
-├─ start-local-ollama.ps1            # 启动本地 Ollama（项目缓存）
-├─ pull-local-model.ps1              # 拉取本地模型（项目缓存）
-├─ run-backend-local.ps1             # 启动后端（项目缓存）
-├─ run-frontend-local.ps1            # 启动前端（项目缓存）
-├─ switch-to-local-model.ps1         # 切换到本地模型配置
-├─ LOCAL_MODEL_SETUP.md              # 本地模型启动说明（简版）
-└─ AGENT_HANDOVER_AND_SCHOOL_DEPLOYMENT.md  # 交接与学校部署手册（完整版）
+Xin-AI-Consultant/
+├─ frontend/                                # 前端项目
+├─ backend/                                 # 后端项目
+│  ├─ main.py                               # API 入口
+│  ├─ llm.py                                # 模型调用与提示词
+│  ├─ knowledge.py                          # 知识检索与导入
+│  ├─ config.py                             # 运行时配置
+│  ├─ preprocess.py                         # 原始数据预处理脚本
+│  └─ data/
+│     ├─ qa_knowledge.json                  # 当前知识库
+│     └─ runtime_config.json                # 后台动态配置（运行中生成）
+├─ scripts/                                 # 启动与运维脚本
+│  ├─ start-local-ollama.ps1
+│  ├─ pull-local-model.ps1
+│  ├─ switch-to-local-model.ps1
+│  ├─ run-backend-local.ps1
+│  └─ run-frontend-local.ps1
+├─ docs/
+│  ├─ DEPLOYMENT_AND_USAGE_GUIDE.md         # 小白部署与使用手册
+│  └─ BUILD_SIMILAR_SYSTEM_FROM_ZERO.md     # 从零搭建同类系统教程
+├─ data-source/
+│  └─ 需要准备的数据-吴迪260313.xlsx            # 原始数据素材
+├─ .env.example
+└─ README.md
 ```
 
 ---
 
-## 快速开始（Windows）
+## 快速开始（Windows，推荐）
 
-## 1) 环境准备
+## 1) 安装依赖软件
 
+- Git
 - Python 3.11+
 - Node.js 20+
-- npm 10+
-- Ollama（Windows）：<https://ollama.com/download/windows>
+- Ollama（Windows 版）
 
-## 2) 克隆与安装依赖
+## 2) 拉取项目并安装依赖
 
 ```powershell
 git clone https://github.com/ChiTing111/Xin-AI-Consultant.git
@@ -73,115 +96,155 @@ npm install
 cd ..
 ```
 
-## 3) 配置环境变量
-
-将 `.env.example` 复制为 `.env`，按需修改管理员密码：
+## 3) 初始化环境变量
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-## 4) 启动本地模型服务
+编辑 `.env`，至少确认：
+
+- `ADMIN_PASSWORD` 已设置
+- `LOCAL_LLM_BASE_URL=http://127.0.0.1:11435/v1`
+- `LOCAL_LLM_MODEL=qwen2.5:3b`
+
+## 4) 启动本地模型与服务
+
+### 窗口 A：启动 Ollama
 
 ```powershell
-.\start-local-ollama.ps1 -OllamaHost "127.0.0.1:11435"
+.\scripts\start-local-ollama.ps1 -OllamaHost "127.0.0.1:11435"
 ```
 
-拉取模型（建议先用 3B 版本，响应更快）：
+### 窗口 B：首次拉取模型
 
 ```powershell
-.\pull-local-model.ps1 -Model "qwen2.5:3b" -OllamaHost "127.0.0.1:11435"
+.\scripts\pull-local-model.ps1 -Model "qwen2.5:3b" -OllamaHost "127.0.0.1:11435"
 ```
 
-## 5) 启动后端与前端
+### 窗口 C：启动后端
 
 ```powershell
-.\run-backend-local.ps1
-.\run-frontend-local.ps1
+.\scripts\run-backend-local.ps1
 ```
 
-访问：
+### 窗口 D：启动前端
 
-- 首页：<http://localhost:3000>
-- 管理后台：<http://localhost:3000/admin>
+```powershell
+.\scripts\run-frontend-local.ps1
+```
+
+访问地址：
+
+- 首页：`http://localhost:3000`
+- 后台：`http://localhost:3000/admin`
+- 健康检查：`http://127.0.0.1:8000/api/health`
 
 ---
 
-## 管理后台使用
+## 管理后台功能说明
 
-默认管理员密码读取 `.env` 中的 `ADMIN_PASSWORD`。
+默认后台密码来自 `.env` 的 `ADMIN_PASSWORD`。
 
 ### 连接配置
 
-- `Base URL`：默认 `http://127.0.0.1:11435/v1`
-- `模型`：可选 `qwen2.5:3b` / `qwen2.5:7b` / `llama3.1:8b`
-- 点击“测试本地模型连接”确认可用
+- Base URL 默认：`http://127.0.0.1:11435/v1`
+- 模型建议：`qwen2.5:3b`（速度优先）
+- 点击“测试本地模型连接”验证可用性
 
 ### 知识库管理
 
-- 上传文件：支持 `.xlsx`、`.json`、`.csv`
-- 上传后立即生效：自动重建索引
-- 预览列表：支持关键词筛选，便于确认已导入内容
+- 支持上传：`.xlsx`、`.json`、`.csv`
+- 上传后自动重建索引并立即生效
+- 提供知识内容预览与关键词筛选
 
 ---
 
-## 知识库文件格式建议
+## API 一览（核心）
 
-- JSON：数组，元素包含 `question` 和 `answer`
-- CSV：表头包含 `问题/答案` 或 `question/answer`
-- Excel：建议至少有“问题”“答案”两列
-
-无效条目（空问题、空答案、"答案正在整理中"）会被自动过滤。
-
----
-
-## 性能说明与优化建议
-
-- 首次推理会慢：模型冷启动会导致第一次回答时间偏长（正常现象）
-- 速度优先：使用 `qwen2.5:3b`
-- 质量优先：使用 `qwen2.5:7b`（显存和时间成本更高）
-- 若明显卡顿：重启 Ollama 服务，再做一次“测试本地模型连接”
+- `POST /api/chat`：非流式问答
+- `POST /api/chat/stream`：SSE 流式问答
+- `GET /api/health`：健康检查
+- `POST /api/admin/login`：管理员登录
+- `GET /api/admin/config`：读取配置
+- `POST /api/admin/config`：保存配置
+- `POST /api/admin/test-connection`：测试模型连接
+- `POST /api/admin/upload-knowledge`：上传知识库
+- `GET /api/admin/knowledge/preview`：知识预览
 
 ---
 
-## 学校部署（推荐拓扑）
+## 知识库格式建议
 
-推荐部署结构：
+- JSON：数组，每条包含 `question`、`answer`
+- CSV：建议表头 `question,answer`
+- Excel：建议两列“问题”“答案”
 
-- `Nginx/Caddy`：负责 80/443 和 HTTPS
-- `Next.js`：前端服务（内网 3000）
-- `FastAPI`：后端服务（内网 8000）
-- `Ollama`：模型服务（内网 11435）
-
-详细部署与交接文档见：
-
-- [`AGENT_HANDOVER_AND_SCHOOL_DEPLOYMENT.md`](./AGENT_HANDOVER_AND_SCHOOL_DEPLOYMENT.md)
+系统会自动过滤无效数据（空值、无意义答案等）。
 
 ---
 
-## 常见问题
+## 常见问题（高频）
 
-### Q1: 页面能打开，但回答很慢？
-- 多数是模型冷启动或模型体积过大导致
-- 先切到 `qwen2.5:3b` 再测试
+### 1) 一直转圈或很慢
+
+- 首次调用可能冷启动偏慢
+- 先确认模型使用 `qwen2.5:3b`
 - 检查后台“测试本地模型连接”是否成功
+- 必要时重启顺序：Ollama -> 后端 -> 前端
 
-### Q2: 上传知识库后没效果？
-- 确认上传成功返回“已生效条目数”
-- 确认内容在知识预览中可查到
-- 适当下调“检索相似度阈值”
+### 2) 上传知识库后无效果
 
-### Q3: 为什么不再支持远程 API Key？
-- 该仓库默认目标是学校低成本长期运行，优先本地模型
-- 如需恢复远程能力，可在代码层另开分支扩展
+- 看后台返回条目数是否 > 0
+- 在知识预览中搜索新问题
+- 问题表述尽量接近知识库内容
+- 按需下调检索阈值
 
----
+### 3) 后台无法登录
 
-## 相关文档
-
-- [`LOCAL_MODEL_SETUP.md`](./LOCAL_MODEL_SETUP.md)：本地模型快速启动说明
-- [`AGENT_HANDOVER_AND_SCHOOL_DEPLOYMENT.md`](./AGENT_HANDOVER_AND_SCHOOL_DEPLOYMENT.md)：完整交接与学校部署手册
+- 检查 `.env` 的 `ADMIN_PASSWORD`
+- 确认后端已重启（修改 `.env` 后建议重启服务）
 
 ---
 
-如果你准备把它交给其他人维护，建议先让接手人按 README 完整走一遍启动和知识库上传流程，再进入生产部署。
+## 学校部署建议（生产）
+
+推荐部署拓扑：
+
+- 前端（Next.js）：内网 `3000`
+- 后端（FastAPI）：内网 `8000`
+- 模型（Ollama）：内网 `11435`
+- 反向代理（Nginx/Caddy）：对外 `80/443` + HTTPS
+
+安全建议：
+
+- 不直接暴露 8000/11435 到公网
+- 后台密码必须强口令
+- 启用定期备份（知识库和配置）
+
+---
+
+## 运维最小清单
+
+每天：
+
+- 检查首页是否可访问
+- 检查后台模型连接测试
+- 抽样提问 2-3 个
+
+每周：
+
+- 备份 `backend/data/qa_knowledge.json`
+- 备份 `.env` 和 `runtime_config.json`
+- 做一次恢复演练
+
+---
+
+## 推荐阅读路径
+
+- 新手运维：先读 [`docs/DEPLOYMENT_AND_USAGE_GUIDE.md`](./docs/DEPLOYMENT_AND_USAGE_GUIDE.md)
+- 开发扩展：再读 [`docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md`](./docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md)
+
+---
+
+如果你要把系统交给其他人维护，建议让接手人先完整跑一遍“启动 + 上传 + 验证 + 排错”，再进入服务器部署。
