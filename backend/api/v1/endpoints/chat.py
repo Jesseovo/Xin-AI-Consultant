@@ -22,7 +22,7 @@ logger = logging.getLogger("xin-ai.chat")
 
 router = APIRouter()
 
-SYSTEM_PROMPT = """你是齐齐哈尔大学智能教学平台的 AI 助手"小新"。
+SYSTEM_PROMPT = """你是 Xin（夹心说）智能教学平台的 AI 助手"小新"。
 
 回答规则：
 1. 若提供了【参考资料】，优先依据资料回答，避免与资料冲突。

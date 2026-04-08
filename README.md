@@ -1,139 +1,222 @@
-# Xin AI Consultant - 智能教学平台
+<div align="center">
 
-齐齐哈尔大学智能教学平台（升级版），融合 DeepTutor 全功能，支持全校师生使用。
+# 🧠 Xin（夹心说）
 
-## 系统能力
+**✨ AI-Powered Intelligent Teaching Platform ✨**
 
-- **知识库问答**（核心）：向量 RAG + TF-IDF 混合检索，支持 PDF/DOCX/TXT/MD/XLSX/JSON/CSV
-- **TutorBot**：老师创建个性化 AI 教师角色（5 种人格模板），学生选择对话
-- **多模式工作区**：Chat / Deep Solve / Quiz / Guided Learning / Deep Research
-- **扩展功能**：Co-Writer 协作写作 / Notebook 笔记本 / Memory 学习画像
-- **三角色系统**：管理员 / 老师 / 学生，JWT 认证
-- **多模型支持**：DeepSeek / OpenAI / Ollama 等，通过 litellm 统一路由
+[![Python](https://img.shields.io/badge/Python-3.12+-blue?logo=python&logoColor=white)](https://python.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![License](https://img.shields.io/badge/License-MIT-green)](#)
 
-## 技术架构
+🌐 **[中文](#-中文文档)** | **[English](#-english-documentation)**
 
-- **前端**：Next.js 15 + React 19 + TailwindCSS 4
-- **后端**：FastAPI + SQLAlchemy + litellm
-- **数据库**：MySQL 8.0 + Redis 7
-- **向量检索**：ChromaDB + sentence-transformers
-- **部署**：Docker Compose
+*Created by **Jesse** 🚀*
 
-## 快速开始
+</div>
 
-### 1. 环境准备
+---
 
-- Python 3.11+
-- Node.js 20+
-- Docker Desktop（用于 MySQL + Redis）
+## 📖 中文文档
 
-### 2. 启动基础服务
+### 💡 这是什么？
 
-```powershell
-# 克隆项目
-git clone https://github.com/Jesseovo/Xin-AI-Consultant.git
-cd Xin-AI-Consultant
-git checkout feature/deeptutor-upgrade
+**Xin（夹心说）** 是一个融合了 AI 大模型的智能教学平台，让老师变身「赛博教师」🤖，学生随时随地都能获得智能辅导。
 
-# 配置环境变量
-Copy-Item .env.example .env
-# 编辑 .env，填入 LLM API Key 等配置
+> 🎯 老师上传资料 → AI 学习理解 → 学生提问即答 → 个性化学习体验
 
-# 启动 MySQL + Redis
-docker compose -f docker-compose.dev.yml up -d
+### ⚡ 核心功能
+
+| 功能 | 说明 |
+|------|------|
+| 🗂️ **知识库问答** | 向量 RAG + TF-IDF 混合检索，支持 PDF / DOCX / TXT / MD / XLSX |
+| 🤖 **TutorBot** | 老师创建个性化 AI 教师角色，5 种人格模板可选 |
+| 🧩 **多模式工作区** | Chat 💬 / Deep Solve 🔍 / Quiz 📝 / Guided Learning 📚 / Deep Research 🔬 |
+| ✍️ **Co-Writer** | AI 协作写作，支持改写、扩写、摘要、翻译 |
+| 📓 **Notebook** | 智能笔记本，自动收集学习记录 |
+| 🧠 **Memory** | 学生画像记忆，越用越懂你 |
+| 👥 **三角色系统** | 管理员 🔧 / 老师 👨‍🏫 / 学生 👨‍🎓，JWT 认证 |
+| 🔀 **多模型支持** | DashScope / DeepSeek / OpenAI / Ollama，litellm 统一路由 |
+
+### 🏗️ 技术架构
+
+```
+┌─────────────────────────────────────────────────┐
+│                 🖥️ Frontend                      │
+│        Next.js 15 + React 19 + TailwindCSS 4    │
+│           Framer Motion ✨ 文字动画效果            │
+├─────────────────────────────────────────────────┤
+│                 ⚙️ Backend                       │
+│      FastAPI + SQLAlchemy + litellm + JWT        │
+├──────────────┬──────────────┬───────────────────┤
+│  💾 Database  │  🔍 Search   │  🤖 LLM           │
+│ SQLite/MySQL │ ChromaDB     │ DashScope/OpenAI  │
+│ Redis(可选)   │ BM25+TF-IDF  │ DeepSeek/Ollama   │
+└──────────────┴──────────────┴───────────────────┘
 ```
 
-### 3. 启动后端
+### 🚀 快速开始
 
-```powershell
-cd backend
-pip install -r requirements.txt
-cd ..
+#### 1️⃣ 环境要求
+
+- 🐍 Python 3.11+
+- 📦 Node.js 20+（前端）
+- 🐋 Docker（可选，用于 MySQL + Redis）
+
+#### 2️⃣ 克隆 & 配置
+
+```bash
+# 📥 克隆项目
+git clone https://github.com/Jesseovo/Xin-AI-Consultant.git
+cd Xin-AI-Consultant
+
+# 📝 配置环境变量
+cp .env.example .env
+# 编辑 .env，填入你的 LLM API Key
+```
+
+#### 3️⃣ 启动后端 🐍
+
+```bash
+pip install -r backend/requirements.txt
 python -m uvicorn backend.app.main:app --reload --port 8000
 ```
 
-### 4. 启动前端
+#### 4️⃣ 启动前端 ⚛️
 
-```powershell
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 5. 访问
+#### 5️⃣ 开始使用 🎉
 
-- 前端：http://localhost:3000
-- 后端 API 文档：http://localhost:8000/docs
-- 健康检查：http://localhost:8000/api/health
+| 地址 | 说明 |
+|------|------|
+| 🌐 http://localhost:3000 | 前端界面 |
+| 📄 http://localhost:8000/docs | API 文档 |
+| 💚 http://localhost:8000/api/health | 健康检查 |
 
-## 测试环境配置（不烧本机性能）
-
-```env
-# LLM 走云端 API，不跑本地大模型
-LLM_PROVIDER=deepseek
-LLM_MODEL=deepseek-chat
-LLM_API_KEY=sk-xxx
-LLM_BASE_URL=https://api.deepseek.com/v1
-
-# Embedding 本地 CPU 推理（无需 GPU）
-EMBEDDING_PROVIDER=local
-EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
-```
-
-## API 概览
+### 🔌 API 概览
 
 | 路径 | 说明 |
 |------|------|
-| `POST /api/chat` | 旧版问答（兼容） |
-| `POST /api/chat/stream` | 旧版流式问答（兼容） |
-| `POST /api/v1/auth/register` | 注册 |
-| `POST /api/v1/auth/login` | 登录 |
-| `POST /api/v1/chat/send` | 新版对话 |
-| `POST /api/v1/chat/stream` | 新版流式对话 |
-| `GET /api/v1/bots/` | TutorBot 列表 |
-| `POST /api/v1/bots/` | 创建 TutorBot |
-| `POST /api/v1/knowledge/` | 创建知识库 |
-| `POST /api/v1/knowledge/{id}/upload` | 上传文档 |
-| `POST /api/v1/quiz/generate` | 生成测验 |
-| `POST /api/v1/guided/plan` | 创建学习计划 |
-| `POST /api/v1/research/` | 深度研究 |
-| `POST /api/v1/cowriter/rewrite` | 协作写作 |
+| `POST /api/v1/auth/register` | 📝 注册 |
+| `POST /api/v1/auth/login` | 🔑 登录 |
+| `POST /api/v1/chat/stream` | 💬 流式对话 |
+| `GET /api/v1/bots/` | 🤖 TutorBot 列表 |
+| `POST /api/v1/knowledge/` | 🗂️ 创建知识库 |
+| `POST /api/v1/knowledge/{id}/upload` | 📤 上传文档 |
+| `POST /api/v1/quiz/generate` | 📝 生成测验 |
+| `POST /api/v1/guided/plan` | 📚 创建学习计划 |
+| `POST /api/v1/research/` | 🔬 深度研究 |
+| `POST /api/v1/cowriter/rewrite` | ✍️ AI 写作 |
 
-完整 API 文档见 http://localhost:8000/docs
+> 📖 完整文档：http://localhost:8000/docs
 
-## 目录结构
+### 📁 项目结构
 
 ```
 Xin-AI-Consultant/
-├── frontend/                      # Next.js 前端
+├── 🖥️ frontend/                    # Next.js 前端
 │   └── src/
-│       ├── app/                   # 页面路由
-│       │   ├── (auth)/            # 登录注册
-│       │   ├── (main)/            # 学生主界面
-│       │   ├── (teacher)/         # 老师面板
-│       │   └── (admin)/           # 管理后台
-│       ├── components/            # 共享组件
-│       └── lib/                   # 工具库
-├── backend/                       # FastAPI 后端
-│   ├── app/                       # 应用入口 + 配置
-│   ├── api/v1/endpoints/          # API 路由
-│   ├── models/                    # ORM 模型（12 张表）
-│   ├── services/                  # 业务逻辑
-│   │   ├── llm_router.py          # 多模型路由
-│   │   ├── rag_pipeline.py        # RAG 检索管道
-│   │   ├── knowledge_service.py   # 知识库服务
-│   │   ├── tutorbot_service.py    # TutorBot 服务
-│   │   └── chat_modes/            # 对话模式
-│   ├── core/                      # 安全 + 缓存
-│   └── db/                        # 数据库连接
-├── docker-compose.dev.yml         # 开发环境（MySQL + Redis）
-├── docker-compose.prod.yml        # 生产环境
-├── Dockerfile                     # 后端容器
-└── docs/                          # 文档
-    └── IMAGE_REQUIREMENTS.md      # 图片需求清单
+│       ├── app/                    # 页面路由
+│       │   ├── (auth)/             # 🔑 登录注册
+│       │   ├── (main)/             # 👨‍🎓 学生主界面
+│       │   ├── (teacher)/          # 👨‍🏫 老师面板
+│       │   └── (admin)/            # 🔧 管理后台
+│       ├── components/             # 🧩 共享组件
+│       └── lib/                    # 🔧 工具库
+├── ⚙️ backend/                     # FastAPI 后端
+│   ├── app/                        # 应用入口
+│   ├── api/v1/endpoints/           # API 路由
+│   ├── models/                     # 数据模型（12 张表）
+│   ├── services/                   # 业务逻辑
+│   │   ├── llm_router.py           # 🔀 多模型路由
+│   │   ├── rag_pipeline.py         # 🔍 RAG 检索管道
+│   │   └── chat_modes/             # 💬 对话模式
+│   ├── core/                       # 🔐 安全 + 缓存
+│   └── db/                         # 💾 数据库连接
+├── 🐋 docker-compose.dev.yml       # 开发环境
+├── 🐋 docker-compose.prod.yml      # 生产环境
+└── 📄 docs/                        # 文档
 ```
 
-## 分支说明
+### 🏷️ 版本说明
 
-- `main`：原始简单问答版本
-- `feature/deeptutor-upgrade`：升级版（本分支）
+| 标签/分支 | 说明 |
+|----------|------|
+| `main` | 🆕 最新完整版（当前） |
+| `v1.0-original` | 📦 原始简单问答版本 |
+
+---
+
+## 📖 English Documentation
+
+### 💡 What is Xin?
+
+**Xin** is an AI-powered intelligent teaching platform that transforms teachers into "cyber tutors" 🤖, enabling students to get personalized AI-assisted learning anytime, anywhere.
+
+> 🎯 Teachers upload materials → AI learns & understands → Students ask & get answers → Personalized learning experience
+
+### ⚡ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🗂️ **Knowledge Base Q&A** | Hybrid RAG (Vector + TF-IDF + BM25), supports PDF / DOCX / TXT / MD / XLSX |
+| 🤖 **TutorBot** | Teachers create personalized AI teacher personas with 5 personality templates |
+| 🧩 **Multi-Mode Workspace** | Chat 💬 / Deep Solve 🔍 / Quiz 📝 / Guided Learning 📚 / Deep Research 🔬 |
+| ✍️ **Co-Writer** | AI collaborative writing: rewrite, expand, summarize, translate |
+| 📓 **Notebook** | Smart notebooks that auto-collect learning records |
+| 🧠 **Memory** | Student profiling — the more you use it, the better it knows you |
+| 👥 **Role System** | Admin 🔧 / Teacher 👨‍🏫 / Student 👨‍🎓 with JWT authentication |
+| 🔀 **Multi-Model** | DashScope / DeepSeek / OpenAI / Ollama via litellm unified routing |
+
+### 🏗️ Tech Stack
+
+- **Frontend**: Next.js 15 + React 19 + TailwindCSS 4 + Framer Motion
+- **Backend**: FastAPI + SQLAlchemy + litellm + JWT
+- **Database**: SQLite (default, zero-config) / MySQL + Redis (optional)
+- **Vector Search**: ChromaDB + sentence-transformers
+- **Deployment**: Docker Compose ready
+
+### 🚀 Quick Start
+
+```bash
+# 📥 Clone
+git clone https://github.com/Jesseovo/Xin-AI-Consultant.git
+cd Xin-AI-Consultant
+
+# 📝 Configure
+cp .env.example .env
+# Edit .env with your LLM API key
+
+# 🐍 Backend
+pip install -r backend/requirements.txt
+python -m uvicorn backend.app.main:app --reload --port 8000
+
+# ⚛️ Frontend (new terminal)
+cd frontend && npm install && npm run dev
+```
+
+Visit 🌐 http://localhost:3000 and start exploring!
+
+### 🏷️ Versions
+
+| Tag/Branch | Description |
+|------------|-------------|
+| `main` | 🆕 Latest full-featured version |
+| `v1.0-original` | 📦 Original simple Q&A version |
+
+---
+
+<div align="center">
+
+**🧠 Xin（夹心说）**
+
+Made with ❤️ by **[Jesse](https://github.com/Jesseovo)**
+
+*Powered by AI, Built for Learning* 🎓
+
+</div>

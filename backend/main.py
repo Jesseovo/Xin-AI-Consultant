@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="齐大软工智能问答系统", lifespan=lifespan)
+app = FastAPI(title="Xin 智能教学平台", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -257,7 +257,7 @@ async def test_connection(_=Depends(verify_admin)):
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "message": "齐大软工智能问答系统运行中"}
+    return {"status": "ok", "message": "Xin 智能教学平台运行中"}
 
 
 if __name__ == "__main__":

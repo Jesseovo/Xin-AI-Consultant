@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from openai import OpenAI
 from .config import get_config
 
-SYSTEM_PROMPT = """你是齐齐哈尔大学软件工程专业的智能问答助手“小软”。
+SYSTEM_PROMPT = """你是Xin（夹心说）智能教学平台的智能问答助手“小软”。
 
 回答规则：
 1. 若提供了【参考资料】，优先依据资料回答，避免与资料冲突。
