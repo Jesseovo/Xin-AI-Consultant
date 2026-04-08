@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, type KeyboardEvent, type ChangeEvent } from "react";
 
 const QUICK_QUESTIONS = [
   {
@@ -88,7 +88,7 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
     onSend(q);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
@@ -115,7 +115,7 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
             <textarea
               ref={textareaRef}
               value={input}
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                 setInput(e.target.value);
                 autoResize();
               }}
