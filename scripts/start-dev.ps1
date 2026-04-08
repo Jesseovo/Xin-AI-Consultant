@@ -1,4 +1,4 @@
-# Xin AI 本地开发一键启动（Windows PowerShell）
+# 夹心 本地开发一键启动（Windows PowerShell）
 # 1) 启动 docker-compose.dev.yml
 # 2) 使用 docker exec 等待 MySQL 就绪
 # 3) 新窗口启动后端与前端
@@ -12,7 +12,7 @@ $mysqlContainer = "xin-mysql"
 $mysqlRootPassword = "xin_root_2026"
 
 Write-Host ""
-Write-Host "======== Xin AI 开发环境 ========" -ForegroundColor Cyan
+Write-Host "======== 夹心 开发环境 ========" -ForegroundColor Cyan
 Write-Host "1) 正在启动 Docker 服务（docker-compose.dev.yml）..." -ForegroundColor Yellow
 
 docker compose -f docker-compose.dev.yml up -d

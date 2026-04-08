@@ -108,7 +108,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block text-[22px] font-semibold tracking-tight text-[--text-primary]">
-            Xin AI
+            夹心
           </Link>
           <p className="mt-1 text-[14px] text-[--text-secondary]">智能教学平台</p>
         </div>

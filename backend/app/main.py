@@ -16,7 +16,7 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Xin AI Consultant 启动中...")
+    logger.info("夹心 启动中...")
     logger.info("数据库后端: %s", settings.db_backend)
 
     async with engine.begin() as conn:
@@ -54,12 +54,12 @@ async def lifespan(app: FastAPI):
             await redis_client.close()
     except Exception:
         pass
-    logger.info("Xin AI Consultant 已关闭")
+    logger.info("夹心 已关闭")
 
 
 app = FastAPI(
-    title="Xin AI Consultant",
-    description="Xin（夹心说）智能教学平台 API",
+    title="夹心",
+    description="夹心智能教学平台 API",
     version="2.0.0",
     lifespan=lifespan,
 )
@@ -92,7 +92,7 @@ async def legacy_chat_stream(req: chat_ep.LegacyChatRequest):
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "version": "2.0.0", "message": "Xin AI 智能教学平台运行中"}
+    return {"status": "ok", "version": "2.0.0", "message": "夹心智能教学平台运行中"}
 
 
 @app.post("/api/admin/login")

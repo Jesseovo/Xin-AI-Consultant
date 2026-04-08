@@ -1,4 +1,4 @@
--- Xin AI Consultant 数据库初始化
+-- 夹心 数据库初始化
 -- Docker MySQL 首次启动时自动执行
 
 SET NAMES utf8mb4;

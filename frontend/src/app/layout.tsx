@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/lib/theme";
 import { AuthProvider } from "@/lib/auth-store";
 
 export const metadata: Metadata = {
-  title: "Xin AI - 智能教学平台",
-  description: "Xin AI 智能教学与辅导平台",
+  title: "夹心 - 智能教学平台",
+  description: "夹心 智能教学与辅导平台",
 };
 
 export default function RootLayout({

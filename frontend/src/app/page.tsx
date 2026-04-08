@@ -184,7 +184,7 @@ export default function LandingPage() {
           </FadeInSection>
 
           <AnimatedTitle
-            text="Xin AI 智能教学平台"
+            text="夹心智能教学平台"
             className="text-[clamp(1.75rem,5vw,3.25rem)] font-semibold tracking-tight leading-[1.15] text-[--text-primary]"
           />
 
@@ -314,7 +314,7 @@ export default function LandingPage() {
               className="text-2xl sm:text-3xl font-semibold tracking-tight text-[--text-primary] leading-tight"
             />
             <TextReveal
-              text="加入 Xin AI，用对话式 AI 连接每一名学生。\n从备课到答疑，全流程加速。"
+              text="加入 夹心，用对话式 AI 连接每一名学生。\n从备课到答疑，全流程加速。"
               className="mt-4 text-[15px] text-[--text-secondary] max-w-md mx-auto text-center"
             />
             <motion.div

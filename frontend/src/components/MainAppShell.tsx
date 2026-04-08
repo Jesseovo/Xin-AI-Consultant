@@ -96,7 +96,7 @@ export default function MainAppShell({ children }: { children: ReactNode }) {
             className={`font-semibold tracking-tight text-[--text-primary] truncate ${collapsed ? "lg:hidden" : ""}`}
             onClick={() => setSidebarOpen(false)}
           >
-            Xin AI
+            夹心
           </Link>
           <button
             type="button"

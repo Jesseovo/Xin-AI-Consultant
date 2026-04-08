@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧠 Xin（夹心说）
+# 🧠 夹心
 
 **✨ AI-Powered Intelligent Teaching Platform ✨**
 
@@ -21,7 +21,7 @@
 
 ### 💡 这是什么？
 
-**Xin（夹心说）** 是一个融合了 AI 大模型的智能教学平台，让老师变身「赛博教师」🤖，学生随时随地都能获得智能辅导。
+**夹心** 是一个融合了 AI 大模型的智能教学平台，让老师变身「赛博教师」🤖，学生随时随地都能获得智能辅导。
 
 > 🎯 老师上传资料 → AI 学习理解 → 学生提问即答 → 个性化学习体验
 
@@ -154,9 +154,9 @@ Xin-AI-Consultant/
 
 ## 📖 English Documentation
 
-### 💡 What is Xin?
+### 💡 What is JiaXin?
 
-**Xin** is an AI-powered intelligent teaching platform that transforms teachers into "cyber tutors" 🤖, enabling students to get personalized AI-assisted learning anytime, anywhere.
+**JiaXin (夹心)** is an AI-powered intelligent teaching platform that transforms teachers into "cyber tutors" 🤖, enabling students to get personalized AI-assisted learning anytime, anywhere.
 
 > 🎯 Teachers upload materials → AI learns & understands → Students ask & get answers → Personalized learning experience
 
@@ -213,7 +213,7 @@ Visit 🌐 http://localhost:3000 and start exploring!
 
 <div align="center">
 
-**🧠 Xin（夹心说）**
+**🧠 夹心**
 
 Made with ❤️ by **[Jesse](https://github.com/Jesseovo)**
 

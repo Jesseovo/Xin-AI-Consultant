@@ -103,10 +103,10 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
             软
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
-            小新
+            夹心
           </h1>
           <p className="mt-2 text-sm sm:text-base text-gray-500">
-            Xin（夹心说）· 智能教学平台
+            夹心 · 智能教学平台
           </p>
         </div>
 

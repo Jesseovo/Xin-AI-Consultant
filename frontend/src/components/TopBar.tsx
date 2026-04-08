@@ -10,7 +10,7 @@ export interface TopBarProps {
 }
 
 export default function TopBar({
-  title = "Xin AI",
+  title = "夹心",
   onMenuToggle,
   userDisplayName = "访客",
   onLogout,
