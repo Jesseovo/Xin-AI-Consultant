@@ -1,12 +1,33 @@
+# === 环境配置 ===
 .env
+
+# === Node.js ===
 node_modules/
 .next/
+
+# === Python ===
 __pycache__/
 *.pyc
-backend/data/runtime_config.json
-backend/.pip_cache/
-.cursor/
 *.egg-info/
 dist/
 build/
+.venv/
+venv/
+
+# === 数据持久化 ===
+data/
+*.db
+
+# === 运行时生成 ===
+backend/data/runtime_config.json
+backend/.pip_cache/
+
+# === IDE ===
+.cursor/
+.vscode/
+
+# === 缓存 ===
 .cache/
+
+# === Embedding 模型缓存 ===
+.model_cache/

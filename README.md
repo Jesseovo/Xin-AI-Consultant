@@ -1,250 +1,139 @@
-# Xin AI Consultant
+# Xin AI Consultant - 智能教学平台
 
-齐齐哈尔大学软件工程专业智能问答系统（本地模型优先版）。
+齐齐哈尔大学智能教学平台（升级版），融合 DeepTutor 全功能，支持全校师生使用。
 
-本仓库目标非常明确：
+## 系统能力
 
-- 让学生提问能得到自然、可执行、不过度模板化的回答
-- 让知识库可以在后台直接上传并立即生效
-- 让学校/团队可以低成本长期维护（默认本地模型，不依赖云端 Key）
-
----
-
-## 你应该先读哪份文档
-
-为避免文档过多，`docs/` 只保留 2 份核心文档：
-
-1. [`docs/DEPLOYMENT_AND_USAGE_GUIDE.md`](./docs/DEPLOYMENT_AND_USAGE_GUIDE.md)  
-   零基础部署与日常使用手册（从安装到排错，按步骤照做即可）
-2. [`docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md`](./docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md)  
-   教你从零做一个同类系统（从需求到上线）
-
-如果你只是想先跑起来，请先看第 1 份。
-
----
-
-## 系统能力概览
-
-- 本地模型优先：默认通过 `Ollama + OpenAI Compatible API`
-- 检索增强回答：TF-IDF + 关键词混合检索，命中资料优先依据资料
-- 通用问题可答：未命中知识库时可给通用建议
-- 管理后台完备：模型配置、连接测试、知识库上传、知识预览
-- 文件上传即生效：支持 `.xlsx/.json/.csv`
-- 缓存本地化：模型/依赖缓存统一写入项目目录，便于迁移和清理
-
----
+- **知识库问答**（核心）：向量 RAG + TF-IDF 混合检索，支持 PDF/DOCX/TXT/MD/XLSX/JSON/CSV
+- **TutorBot**：老师创建个性化 AI 教师角色（5 种人格模板），学生选择对话
+- **多模式工作区**：Chat / Deep Solve / Quiz / Guided Learning / Deep Research
+- **扩展功能**：Co-Writer 协作写作 / Notebook 笔记本 / Memory 学习画像
+- **三角色系统**：管理员 / 老师 / 学生，JWT 认证
+- **多模型支持**：DeepSeek / OpenAI / Ollama 等，通过 litellm 统一路由
 
 ## 技术架构
 
-- 前端：Next.js 15 + TypeScript + TailwindCSS
-- 后端：FastAPI + Uvicorn
-- 检索：scikit-learn TF-IDF + jieba
-- 模型：Ollama（本地）
-- 数据文件：`backend/data/qa_knowledge.json`
+- **前端**：Next.js 15 + React 19 + TailwindCSS 4
+- **后端**：FastAPI + SQLAlchemy + litellm
+- **数据库**：MySQL 8.0 + Redis 7
+- **向量检索**：ChromaDB + sentence-transformers
+- **部署**：Docker Compose
 
----
+## 快速开始
 
-## 目录结构（当前）
+### 1. 环境准备
 
-```text
-Xin-AI-Consultant/
-├─ frontend/                                # 前端项目
-├─ backend/                                 # 后端项目
-│  ├─ main.py                               # API 入口
-│  ├─ llm.py                                # 模型调用与提示词
-│  ├─ knowledge.py                          # 知识检索与导入
-│  ├─ config.py                             # 运行时配置
-│  ├─ preprocess.py                         # 原始数据预处理脚本
-│  └─ data/
-│     ├─ qa_knowledge.json                  # 当前知识库
-│     └─ runtime_config.json                # 后台动态配置（运行中生成）
-├─ scripts/                                 # 启动与运维脚本
-│  ├─ start-local-ollama.ps1
-│  ├─ pull-local-model.ps1
-│  ├─ switch-to-local-model.ps1
-│  ├─ run-backend-local.ps1
-│  └─ run-frontend-local.ps1
-├─ docs/
-│  ├─ DEPLOYMENT_AND_USAGE_GUIDE.md         # 小白部署与使用手册
-│  └─ BUILD_SIMILAR_SYSTEM_FROM_ZERO.md     # 从零搭建同类系统教程
-├─ data-source/
-│  └─ 需要准备的数据-吴迪260313.xlsx            # 原始数据素材
-├─ .env.example
-└─ README.md
-```
-
----
-
-## 快速开始（Windows，推荐）
-
-## 1) 安装依赖软件
-
-- Git
 - Python 3.11+
 - Node.js 20+
-- Ollama（Windows 版）
+- Docker Desktop（用于 MySQL + Redis）
 
-## 2) 拉取项目并安装依赖
+### 2. 启动基础服务
 
 ```powershell
-git clone https://github.com/ChiTing111/Xin-AI-Consultant.git
+# 克隆项目
+git clone https://github.com/Jesseovo/Xin-AI-Consultant.git
 cd Xin-AI-Consultant
+git checkout feature/deeptutor-upgrade
 
-py -m pip install -r backend/requirements.txt
+# 配置环境变量
+Copy-Item .env.example .env
+# 编辑 .env，填入 LLM API Key 等配置
+
+# 启动 MySQL + Redis
+docker compose -f docker-compose.dev.yml up -d
+```
+
+### 3. 启动后端
+
+```powershell
+cd backend
+pip install -r requirements.txt
+cd ..
+python -m uvicorn backend.app.main:app --reload --port 8000
+```
+
+### 4. 启动前端
+
+```powershell
 cd frontend
 npm install
-cd ..
+npm run dev
 ```
 
-## 3) 初始化环境变量
+### 5. 访问
 
-```powershell
-Copy-Item .env.example .env
+- 前端：http://localhost:3000
+- 后端 API 文档：http://localhost:8000/docs
+- 健康检查：http://localhost:8000/api/health
+
+## 测试环境配置（不烧本机性能）
+
+```env
+# LLM 走云端 API，不跑本地大模型
+LLM_PROVIDER=deepseek
+LLM_MODEL=deepseek-chat
+LLM_API_KEY=sk-xxx
+LLM_BASE_URL=https://api.deepseek.com/v1
+
+# Embedding 本地 CPU 推理（无需 GPU）
+EMBEDDING_PROVIDER=local
+EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 ```
 
-编辑 `.env`，至少确认：
+## API 概览
 
-- `ADMIN_PASSWORD` 已设置
-- `LOCAL_LLM_BASE_URL=http://127.0.0.1:11435/v1`
-- `LOCAL_LLM_MODEL=qwen2.5:3b`
+| 路径 | 说明 |
+|------|------|
+| `POST /api/chat` | 旧版问答（兼容） |
+| `POST /api/chat/stream` | 旧版流式问答（兼容） |
+| `POST /api/v1/auth/register` | 注册 |
+| `POST /api/v1/auth/login` | 登录 |
+| `POST /api/v1/chat/send` | 新版对话 |
+| `POST /api/v1/chat/stream` | 新版流式对话 |
+| `GET /api/v1/bots/` | TutorBot 列表 |
+| `POST /api/v1/bots/` | 创建 TutorBot |
+| `POST /api/v1/knowledge/` | 创建知识库 |
+| `POST /api/v1/knowledge/{id}/upload` | 上传文档 |
+| `POST /api/v1/quiz/generate` | 生成测验 |
+| `POST /api/v1/guided/plan` | 创建学习计划 |
+| `POST /api/v1/research/` | 深度研究 |
+| `POST /api/v1/cowriter/rewrite` | 协作写作 |
 
-## 4) 启动本地模型与服务
+完整 API 文档见 http://localhost:8000/docs
 
-### 窗口 A：启动 Ollama
+## 目录结构
 
-```powershell
-.\scripts\start-local-ollama.ps1 -OllamaHost "127.0.0.1:11435"
+```
+Xin-AI-Consultant/
+├── frontend/                      # Next.js 前端
+│   └── src/
+│       ├── app/                   # 页面路由
+│       │   ├── (auth)/            # 登录注册
+│       │   ├── (main)/            # 学生主界面
+│       │   ├── (teacher)/         # 老师面板
+│       │   └── (admin)/           # 管理后台
+│       ├── components/            # 共享组件
+│       └── lib/                   # 工具库
+├── backend/                       # FastAPI 后端
+│   ├── app/                       # 应用入口 + 配置
+│   ├── api/v1/endpoints/          # API 路由
+│   ├── models/                    # ORM 模型（12 张表）
+│   ├── services/                  # 业务逻辑
+│   │   ├── llm_router.py          # 多模型路由
+│   │   ├── rag_pipeline.py        # RAG 检索管道
+│   │   ├── knowledge_service.py   # 知识库服务
+│   │   ├── tutorbot_service.py    # TutorBot 服务
+│   │   └── chat_modes/            # 对话模式
+│   ├── core/                      # 安全 + 缓存
+│   └── db/                        # 数据库连接
+├── docker-compose.dev.yml         # 开发环境（MySQL + Redis）
+├── docker-compose.prod.yml        # 生产环境
+├── Dockerfile                     # 后端容器
+└── docs/                          # 文档
+    └── IMAGE_REQUIREMENTS.md      # 图片需求清单
 ```
 
-### 窗口 B：首次拉取模型
+## 分支说明
 
-```powershell
-.\scripts\pull-local-model.ps1 -Model "qwen2.5:3b" -OllamaHost "127.0.0.1:11435"
-```
-
-### 窗口 C：启动后端
-
-```powershell
-.\scripts\run-backend-local.ps1
-```
-
-### 窗口 D：启动前端
-
-```powershell
-.\scripts\run-frontend-local.ps1
-```
-
-访问地址：
-
-- 首页：`http://localhost:3000`
-- 后台：`http://localhost:3000/admin`
-- 健康检查：`http://127.0.0.1:8000/api/health`
-
----
-
-## 管理后台功能说明
-
-默认后台密码来自 `.env` 的 `ADMIN_PASSWORD`。
-
-### 连接配置
-
-- Base URL 默认：`http://127.0.0.1:11435/v1`
-- 模型建议：`qwen2.5:3b`（速度优先）
-- 点击“测试本地模型连接”验证可用性
-
-### 知识库管理
-
-- 支持上传：`.xlsx`、`.json`、`.csv`
-- 上传后自动重建索引并立即生效
-- 提供知识内容预览与关键词筛选
-
----
-
-## API 一览（核心）
-
-- `POST /api/chat`：非流式问答
-- `POST /api/chat/stream`：SSE 流式问答
-- `GET /api/health`：健康检查
-- `POST /api/admin/login`：管理员登录
-- `GET /api/admin/config`：读取配置
-- `POST /api/admin/config`：保存配置
-- `POST /api/admin/test-connection`：测试模型连接
-- `POST /api/admin/upload-knowledge`：上传知识库
-- `GET /api/admin/knowledge/preview`：知识预览
-
----
-
-## 知识库格式建议
-
-- JSON：数组，每条包含 `question`、`answer`
-- CSV：建议表头 `question,answer`
-- Excel：建议两列“问题”“答案”
-
-系统会自动过滤无效数据（空值、无意义答案等）。
-
----
-
-## 常见问题（高频）
-
-### 1) 一直转圈或很慢
-
-- 首次调用可能冷启动偏慢
-- 先确认模型使用 `qwen2.5:3b`
-- 检查后台“测试本地模型连接”是否成功
-- 必要时重启顺序：Ollama -> 后端 -> 前端
-
-### 2) 上传知识库后无效果
-
-- 看后台返回条目数是否 > 0
-- 在知识预览中搜索新问题
-- 问题表述尽量接近知识库内容
-- 按需下调检索阈值
-
-### 3) 后台无法登录
-
-- 检查 `.env` 的 `ADMIN_PASSWORD`
-- 确认后端已重启（修改 `.env` 后建议重启服务）
-
----
-
-## 学校部署建议（生产）
-
-推荐部署拓扑：
-
-- 前端（Next.js）：内网 `3000`
-- 后端（FastAPI）：内网 `8000`
-- 模型（Ollama）：内网 `11435`
-- 反向代理（Nginx/Caddy）：对外 `80/443` + HTTPS
-
-安全建议：
-
-- 不直接暴露 8000/11435 到公网
-- 后台密码必须强口令
-- 启用定期备份（知识库和配置）
-
----
-
-## 运维最小清单
-
-每天：
-
-- 检查首页是否可访问
-- 检查后台模型连接测试
-- 抽样提问 2-3 个
-
-每周：
-
-- 备份 `backend/data/qa_knowledge.json`
-- 备份 `.env` 和 `runtime_config.json`
-- 做一次恢复演练
-
----
-
-## 推荐阅读路径
-
-- 新手运维：先读 [`docs/DEPLOYMENT_AND_USAGE_GUIDE.md`](./docs/DEPLOYMENT_AND_USAGE_GUIDE.md)
-- 开发扩展：再读 [`docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md`](./docs/BUILD_SIMILAR_SYSTEM_FROM_ZERO.md)
-
----
-
-如果你要把系统交给其他人维护，建议让接手人先完整跑一遍“启动 + 上传 + 验证 + 排错”，再进入服务器部署。
+- `main`：原始简单问答版本
+- `feature/deeptutor-upgrade`：升级版（本分支）

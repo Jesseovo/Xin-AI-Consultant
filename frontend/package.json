@@ -1,6 +1,6 @@
 {
-  "name": "qqhru-se-qa-system",
-  "version": "0.1.0",
+  "name": "xin-ai-platform",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -13,7 +13,11 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "lucide-react": "^0.460.0",
+    "zustand": "^5.0.0",
+    "swr": "^2.2.0",
+    "rehype-highlight": "^7.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.0",

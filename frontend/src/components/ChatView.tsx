@@ -137,7 +137,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
                 <MessageBubble
                   role={msg.role}
                   content={msg.content}
-                  streaming={msg.streaming}
+                  isStreaming={msg.streaming}
                 />
               )}
               {msg.teacherContact && (

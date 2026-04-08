@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/theme";
+import { AuthProvider } from "@/lib/auth-store";
 
 export const metadata: Metadata = {
-  title: "小软 · 齐大软工智能问答",
-  description: "齐齐哈尔大学软件工程专业智能问答系统",
+  title: "Xin AI - 智能教学平台",
+  description: "Xin AI 智能教学与辅导平台",
 };
 
 export default function RootLayout({
@@ -21,8 +22,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+      <body className="min-h-screen">
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
