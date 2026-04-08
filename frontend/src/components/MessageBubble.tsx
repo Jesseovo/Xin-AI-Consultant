@@ -1,8 +1,20 @@
 "use client";
 
+import "highlight.js/styles/github.css";
+import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
+
+function safeUrlTransform(url: string): string {
+  const safe = ["http:", "https:", "mailto:"];
+  try {
+    const u = new URL(url, "https://placeholder.com");
+    return safe.includes(u.protocol) ? url : "";
+  } catch {
+    return url.startsWith("/") ? url : "";
+  }
+}
 
 export interface MessageSource {
   text: string;
@@ -40,7 +52,12 @@ export default function MessageBubble({
   const isUser = role === "user";
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 animate-fade`}>
+    <motion.div
+      className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4`}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: [0.25, 0.4, 0.25, 1] }}
+    >
       <div className="min-w-0 max-w-[85%] sm:max-w-[75%] flex flex-col gap-2">
         <div
           className={
@@ -61,7 +78,11 @@ export default function MessageBubble({
             content
           ) : (
             <>
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+                urlTransform={safeUrlTransform}
+              >
                 {content}
               </ReactMarkdown>
               {isStreaming && (
@@ -105,6 +126,6 @@ export default function MessageBubble({
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

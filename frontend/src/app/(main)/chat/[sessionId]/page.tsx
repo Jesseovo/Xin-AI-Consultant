@@ -38,36 +38,50 @@ export default function ChatSessionPage() {
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<ChatMode>("chat");
   const [streaming, setStreaming] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [historyError, setHistoryError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const streamAccRef = useRef("");
+  const streamSourcesRef = useRef<ChatMessage["sources"]>(undefined);
+  const streamRafRef = useRef<number | null>(null);
+
+  const loadHistory = useCallback(async () => {
+    if (!sessionId) return;
+    setHistoryLoading(true);
+    setHistoryError(null);
+    try {
+      const res = await api.get<{ messages?: ChatMessage[] }>(`/chat/sessions/${sessionId}/messages`);
+      const list = res.messages;
+      if (Array.isArray(list) && list.length > 0) {
+        setMessages(
+          list.map((m) => ({
+            ...m,
+            id: m.id || genId(),
+          }))
+        );
+      } else {
+        setMessages([]);
+      }
+    } catch {
+      setHistoryError("无法加载会话历史，请检查网络或稍后重试。");
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [sessionId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
 
   useEffect(() => {
-    if (!sessionId) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await api.get<{ messages?: ChatMessage[] }>(`/chat/sessions/${sessionId}/messages`);
-        const list = res.messages;
-        if (!cancelled && Array.isArray(list) && list.length > 0) {
-          setMessages(
-            list.map((m) => ({
-              ...m,
-              id: m.id || genId(),
-            }))
-          );
-        }
-      } catch {
-        /* 使用空会话 */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [sessionId]);
+    if (!sessionId) {
+      setHistoryLoading(false);
+      return;
+    }
+    setMessages([]);
+    void loadHistory();
+  }, [sessionId, loadHistory]);
 
   const send = useCallback(async () => {
     const text = input.trim();
@@ -75,35 +89,63 @@ export default function ChatSessionPage() {
     setInput("");
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
+    if (streamRafRef.current !== null) {
+      cancelAnimationFrame(streamRafRef.current);
+      streamRafRef.current = null;
+    }
+    streamAccRef.current = "";
+    streamSourcesRef.current = undefined;
+
     const userMsg: ChatMessage = { id: genId(), role: "user", content: text };
     const aiId = genId();
     const aiMsg: ChatMessage = { id: aiId, role: "assistant", content: "", streaming: true, sources: undefined };
     setMessages((prev) => [...prev, userMsg, aiMsg]);
     setStreaming(true);
 
-    let acc = "";
-    let sources: ChatMessage["sources"];
+    const flushFrame = () => {
+      streamRafRef.current = null;
+      const acc = streamAccRef.current;
+      const srcSnap = streamSourcesRef.current;
+      setMessages((prev) =>
+        prev.map((m) => (m.id === aiId ? { ...m, content: acc, sources: srcSnap ?? m.sources } : m))
+      );
+    };
 
     await api.postStream(
       `/chat/sessions/${sessionId}/messages/stream`,
       { content: text, mode },
       (chunk) => {
         const src = extractSources(chunk);
-        if (src?.length) sources = src;
-        acc = mergeStreamChunk(acc, chunk);
-        setMessages((prev) =>
-          prev.map((m) => (m.id === aiId ? { ...m, content: acc, sources: sources ?? m.sources } : m))
-        );
+        if (src?.length) streamSourcesRef.current = src;
+        streamAccRef.current = mergeStreamChunk(streamAccRef.current, chunk);
+        if (streamRafRef.current === null) {
+          streamRafRef.current = requestAnimationFrame(flushFrame);
+        }
       },
       () => {
+        if (streamRafRef.current !== null) {
+          cancelAnimationFrame(streamRafRef.current);
+          streamRafRef.current = null;
+        }
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === aiId ? { ...m, content: acc, streaming: false, sources: sources ?? m.sources } : m
+            m.id === aiId
+              ? {
+                  ...m,
+                  content: streamAccRef.current,
+                  streaming: false,
+                  sources: streamSourcesRef.current ?? m.sources,
+                }
+              : m
           )
         );
         setStreaming(false);
       },
       (err) => {
+        if (streamRafRef.current !== null) {
+          cancelAnimationFrame(streamRafRef.current);
+          streamRafRef.current = null;
+        }
         setMessages((prev) =>
           prev.map((m) =>
             m.id === aiId ? { ...m, content: `错误：${err}`, streaming: false } : m
@@ -131,7 +173,43 @@ export default function ChatSessionPage() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
-        {messages.length === 0 && (
+        {historyLoading && messages.length === 0 && (
+          <div className="space-y-4 py-4 animate-pulse" aria-busy="true" aria-label="加载消息">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className={`flex mb-4 ${i % 2 === 0 ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className="sf-card max-w-[75%] rounded-2xl px-4 py-3 space-y-2"
+                  style={i % 2 === 0 ? { background: "var(--user-bubble)" } : undefined}
+                >
+                  <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,200px)]" />
+                  <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,160px)]" />
+                  {i % 2 === 1 && <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,120px)]" />}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {historyError && (
+          <div
+            className="mb-4 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-[13px] text-red-700 dark:text-red-300"
+            role="alert"
+          >
+            <p>{historyError}</p>
+            <button
+              type="button"
+              onClick={() => void loadHistory()}
+              className="mt-2 px-3 py-1.5 rounded-lg bg-[--accent] text-white text-[12px] font-medium"
+            >
+              重试加载
+            </button>
+          </div>
+        )}
+
+        {!historyLoading && !historyError && messages.length === 0 && (
           <p className="text-[14px] text-[--text-secondary] text-center py-12">输入问题开始对话</p>
         )}
         {messages.map((msg) => (

@@ -1,10 +1,10 @@
 """认证相关 Schema"""
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RegisterRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(min_length=2, max_length=50)
+    password: str = Field(min_length=6, max_length=100)
     display_name: str | None = None
     email: str | None = None
     role: str = "student"
@@ -14,8 +14,8 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    username: str
-    password: str
+    username: str = Field(min_length=2, max_length=50)
+    password: str = Field(min_length=6, max_length=100)
 
 
 class TokenResponse(BaseModel):

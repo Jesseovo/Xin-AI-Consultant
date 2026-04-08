@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth-store";
 import { useTheme } from "@/lib/theme";
 import {
@@ -44,7 +44,7 @@ function ThemeToggleBtn() {
   );
 }
 
-export default function MainAppShell({ children }: { children: React.ReactNode }) {
+export default function MainAppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, ready, logout } = useAuth();

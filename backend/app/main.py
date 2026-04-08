@@ -66,7 +66,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -80,11 +80,13 @@ from backend.api.v1.endpoints import chat as chat_ep, admin as admin_ep
 
 @app.post("/api/chat")
 async def legacy_chat(req: chat_ep.LegacyChatRequest):
+    """旧版对话：无用户认证，仅兼容早期前端；生产环境建议改用 /api/v1/chat。"""
     return await chat_ep.legacy_chat(req)
 
 
 @app.post("/api/chat/stream")
 async def legacy_chat_stream(req: chat_ep.LegacyChatRequest):
+    """旧版流式对话：无用户认证，仅兼容早期前端。"""
     return await chat_ep.legacy_chat_stream(req)
 
 
@@ -95,6 +97,7 @@ async def health():
 
 @app.post("/api/admin/login")
 async def legacy_admin_login(req: admin_ep.AdminLoginRequest):
+    """管理员口令校验后签发 JWT；管理接口请携带 Authorization: Bearer <token>。"""
     return await admin_ep.legacy_admin_login(req)
 
 

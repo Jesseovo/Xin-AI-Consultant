@@ -43,6 +43,7 @@ export default function BotsGalleryPage() {
   const [bots, setBots] = useState<TutorBotSummary[]>([]);
   const [filter, setFilter] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [isDemo, setIsDemo] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -50,9 +51,15 @@ export default function BotsGalleryPage() {
       try {
         const res = await api.get<BotsResponse>("/bots");
         const list = res.items ?? res.bots ?? [];
-        if (!cancelled) setBots(Array.isArray(list) && list.length > 0 ? list : MOCK_BOTS);
+        if (!cancelled) {
+          setIsDemo(false);
+          setBots(Array.isArray(list) && list.length > 0 ? list : MOCK_BOTS);
+        }
       } catch {
-        if (!cancelled) setBots(MOCK_BOTS);
+        if (!cancelled) {
+          setIsDemo(true);
+          setBots(MOCK_BOTS);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -92,6 +99,12 @@ export default function BotsGalleryPage() {
         <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">导师机器人</h1>
         <p className="text-[13px] text-[--text-secondary] mt-0.5">选择学科与机器人，开始个性化辅导</p>
       </div>
+
+      {isDemo && (
+        <div className="mb-6 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2 text-sm text-amber-700 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-200">
+          ⚠ 无法连接服务器，当前显示演示数据
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-2 mb-6">
         <button

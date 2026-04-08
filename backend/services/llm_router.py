@@ -73,6 +73,13 @@ async def chat_completion(
         return await litellm.acompletion(**params)
     else:
         response = await litellm.acompletion(**params)
+        choices = getattr(response, "choices", None)
+        if not choices:
+            raise ValueError("LLM 返回无有效 choices")
+        first = choices[0]
+        msg = getattr(first, "message", None)
+        if msg is None:
+            raise ValueError("LLM 返回消息结构无效")
         return response
 
 
@@ -106,7 +113,13 @@ async def cached_chat(
             return cached["answer"]
 
     response = await chat_completion(messages=messages, **kwargs)
-    answer = response.choices[0].message.content
+    choices = getattr(response, "choices", None)
+    if not choices:
+        raise ValueError("LLM 返回无有效 choices")
+    msg = getattr(choices[0], "message", None)
+    if msg is None:
+        raise ValueError("LLM 返回消息结构无效")
+    answer = msg.content
 
     if cache_key and answer:
         await set_cached("chat:qa", cache_key, {"answer": answer}, ttl=cache_ttl)

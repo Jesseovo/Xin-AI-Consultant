@@ -134,6 +134,14 @@ async def update_bot(
             TutorBotKnowledge.__table__.delete().where(TutorBotKnowledge.bot_id == bot_id)
         )
         for kb_id in req.kb_ids:
+            kb_check = await db.execute(
+                select(KnowledgeBase).where(
+                    KnowledgeBase.id == kb_id,
+                    KnowledgeBase.owner_id == user.id,
+                )
+            )
+            if not kb_check.scalar_one_or_none():
+                raise HTTPException(status_code=400, detail=f"知识库 {kb_id} 不存在或无权使用")
             db.add(TutorBotKnowledge(bot_id=bot.id, kb_id=kb_id))
 
     await db.commit()

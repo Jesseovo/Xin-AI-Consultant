@@ -11,7 +11,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.deps import get_current_user, get_db
-from backend.models.tutorbot import TutorBot
+from backend.models.knowledge_base import KnowledgeBase
+from backend.models.tutorbot import TutorBot, TutorBotKnowledge
 from backend.services import memory_service, session_service, tutorbot_service
 from backend.services.knowledge_service import search_legacy
 from backend.services.llm_router import chat_completion, chat_completion_stream
@@ -97,6 +98,36 @@ async def _run_rag(query: str, kb_ids: list[int] | None) -> list[dict]:
     return search_legacy(query, top_k=5)
 
 
+async def _validate_request_kb_ids(kb_ids: list[int], user, db: AsyncSession) -> None:
+    """请求体显式传入的 kb_ids：须为本人知识库，或由公开 TutorBot 关联。"""
+    seen: set[int] = set()
+    for kb_id in kb_ids:
+        if kb_id in seen:
+            continue
+        seen.add(kb_id)
+        owned = await db.execute(
+            select(KnowledgeBase.id).where(
+                KnowledgeBase.id == kb_id,
+                KnowledgeBase.owner_id == user.id,
+            )
+        )
+        if owned.scalar_one_or_none() is not None:
+            continue
+        public_link = await db.execute(
+            select(TutorBotKnowledge.kb_id)
+            .join(TutorBot, TutorBotKnowledge.bot_id == TutorBot.id)
+            .where(
+                TutorBotKnowledge.kb_id == kb_id,
+                TutorBot.is_public == True,
+                TutorBot.is_active == True,
+            )
+            .limit(1)
+        )
+        if public_link.scalar_one_or_none() is not None:
+            continue
+        raise HTTPException(status_code=403, detail=f"无权使用知识库 {kb_id}")
+
+
 async def _assert_bot_usable(bot_id: int, user, db: AsyncSession) -> TutorBot:
     result = await db.execute(select(TutorBot).where(TutorBot.id == bot_id))
     bot = result.scalar_one_or_none()
@@ -129,7 +160,7 @@ async def _run_memory_refresh(user_id: int, bot_id: int | None, interaction: str
 # ===== 旧版兼容接口 =====
 
 class LegacyChatRequest(BaseModel):
-    question: str
+    question: str = Field(max_length=10000)
 
 
 async def legacy_chat(req: LegacyChatRequest):
@@ -196,7 +227,7 @@ async def legacy_chat_stream(req: LegacyChatRequest):
 # ===== 新版 V1 接口 =====
 
 class ChatV1SendRequest(BaseModel):
-    message: str
+    message: str = Field(max_length=10000)
     session_id: int | None = None
     bot_id: int | None = None
     mode: str = Field(default="chat")
@@ -258,9 +289,13 @@ async def send_message(
         raise HTTPException(status_code=404, detail="TutorBot 不存在或已停用")
 
     kb_ids = req.kb_ids
+    kb_from_request = req.kb_ids is not None
     if kb_ids is None and eff_bot_id:
         _, linked = await tutorbot_service.get_bot_with_kb(eff_bot_id, db)
         kb_ids = linked or None
+
+    if kb_from_request and kb_ids:
+        await _validate_request_kb_ids(kb_ids, user, db)
 
     sources = await _run_rag(text, kb_ids)
     memory_ctx = await memory_service.get_context_from_memory(user.id, eff_bot_id, db)
@@ -335,9 +370,13 @@ async def stream_message(
         raise HTTPException(status_code=404, detail="TutorBot 不存在或已停用")
 
     kb_ids = req.kb_ids
+    kb_from_request = req.kb_ids is not None
     if kb_ids is None and eff_bot_id:
         _, linked = await tutorbot_service.get_bot_with_kb(eff_bot_id, db)
         kb_ids = linked or None
+
+    if kb_from_request and kb_ids:
+        await _validate_request_kb_ids(kb_ids, user, db)
 
     sources = await _run_rag(text, kb_ids)
     memory_ctx = await memory_service.get_context_from_memory(user.id, eff_bot_id, db)

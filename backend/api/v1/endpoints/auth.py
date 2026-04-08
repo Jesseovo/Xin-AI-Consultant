@@ -87,7 +87,11 @@ async def refresh_token(req: RefreshRequest, db: AsyncSession = Depends(get_db))
     if not payload:
         raise HTTPException(status_code=401, detail="无效的 Refresh Token")
 
-    result = await db.execute(select(User).where(User.id == payload["sub"]))
+    sub = payload.get("sub")
+    if sub is None:
+        raise HTTPException(status_code=401, detail="无效的 Refresh Token")
+
+    result = await db.execute(select(User).where(User.id == sub))
     user = result.scalar_one_or_none()
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="用户不存在或已禁用")

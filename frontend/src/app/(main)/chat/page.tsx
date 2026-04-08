@@ -42,14 +42,17 @@ export default function ChatSessionsPage() {
   const [sessions, setSessions] = useState<ChatSessionSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get<SessionsResponse>("/chat/sessions");
       const list = res.items ?? res.sessions ?? [];
+      setIsDemo(false);
       setSessions(Array.isArray(list) && list.length > 0 ? list : MOCK_SESSIONS);
     } catch {
+      setIsDemo(true);
       setSessions(MOCK_SESSIONS);
     } finally {
       setLoading(false);
@@ -90,8 +93,25 @@ export default function ChatSessionsPage() {
         </button>
       </div>
 
+      {isDemo && (
+        <div className="mx-4 mt-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2 text-sm text-amber-700 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-200">
+          ⚠ 无法连接服务器，当前显示演示数据
+        </div>
+      )}
+
       {loading ? (
-        <p className="text-[14px] text-[--text-muted]">加载会话…</p>
+        <ul className="space-y-3 animate-pulse" aria-busy="true" aria-label="加载会话">
+          {[0, 1, 2].map((i) => (
+            <li key={i} className="sf-card rounded-2xl p-4">
+              <div className="h-4 rounded-md bg-[--bg-card-hover] w-[min(70%,280px)]" />
+              <div className="h-3 rounded-md bg-[--bg-card-hover] w-[40%] mt-3" />
+              <div className="flex justify-between gap-3 mt-4">
+                <div className="h-3 rounded-md bg-[--bg-card-hover] w-24" />
+                <div className="h-3 rounded-md bg-[--bg-card-hover] w-16" />
+              </div>
+            </li>
+          ))}
+        </ul>
       ) : (
         <ul className="space-y-3">
           {sessions.map((s) => (

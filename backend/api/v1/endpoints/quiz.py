@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.deps import get_current_user, get_db
 from backend.models.quiz import Quiz, QuizAttempt
+from backend.models.tutorbot import TutorBot
 from backend.services.chat_modes.quiz_mode import generate_quiz, grade_quiz
 from backend.services.knowledge_service import search_legacy
 
@@ -26,6 +27,17 @@ class QuizGenerateRequest(BaseModel):
 
 class QuizSubmitRequest(BaseModel):
     answers: list[dict]
+
+
+async def _assert_quiz_accessible(quiz: Quiz, user, db: AsyncSession) -> None:
+    if quiz.creator_id == user.id:
+        return
+    if quiz.bot_id is not None:
+        r = await db.execute(select(TutorBot).where(TutorBot.id == quiz.bot_id))
+        bot = r.scalar_one_or_none()
+        if bot and bot.is_active and (bot.is_public or bot.teacher_id == user.id):
+            return
+    raise HTTPException(status_code=403, detail="无权访问该测验")
 
 
 def _questions_from_stored(raw: dict | list) -> list[dict]:
@@ -96,6 +108,8 @@ async def submit_quiz(
     if not quiz:
         raise HTTPException(status_code=404, detail="测验不存在")
 
+    await _assert_quiz_accessible(quiz, user, db)
+
     stored = quiz.questions
     qlist = _questions_from_stored(stored)
     if not qlist:
@@ -163,6 +177,8 @@ async def get_quiz_detail(
     quiz = result.scalar_one_or_none()
     if not quiz:
         raise HTTPException(status_code=404, detail="测验不存在")
+
+    await _assert_quiz_accessible(quiz, user, db)
 
     qlist = _questions_from_stored(quiz.questions)
     title = quiz.title

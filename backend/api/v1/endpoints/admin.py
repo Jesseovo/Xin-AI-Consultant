@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from backend.app.config import get_settings
 from backend.app.deps import get_current_admin
+from backend.core.security import create_access_token
 from backend.services.llm_router import test_connection
 from backend.services.knowledge_service import get_legacy_stats, get_legacy_preview
 
@@ -27,7 +28,8 @@ class SystemConfigResponse(BaseModel):
 async def legacy_admin_login(req: AdminLoginRequest):
     if req.password != settings.admin_password:
         raise HTTPException(status_code=401, detail="密码错误")
-    return {"token": settings.admin_password, "message": "登录成功"}
+    token = create_access_token({"sub": "admin", "role": "admin"})
+    return {"success": True, "token": token}
 
 
 @router.get("/config")
@@ -61,7 +63,7 @@ async def knowledge_preview(
 
 
 @router.get("/system/health")
-async def system_health():
+async def system_health(user=Depends(get_current_admin)):
     return {
         "status": "ok",
         "version": "2.0.0",

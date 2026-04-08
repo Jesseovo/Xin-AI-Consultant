@@ -1,5 +1,6 @@
 """FastAPI 依赖注入"""
 from collections.abc import AsyncGenerator
+from types import SimpleNamespace
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -50,7 +51,31 @@ async def get_current_teacher(user=Depends(get_current_user)):
     return user
 
 
-async def get_current_admin(user=Depends(get_current_user)):
+async def get_current_admin(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security_scheme),
+    db: AsyncSession = Depends(get_db),
+):
+    if not credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="未提供认证信息",
+        )
+    payload = decode_access_token(credentials.credentials)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="无效或过期的 Token",
+        )
+    # 旧版管理员登录签发的 JWT（口令门禁，非数据库用户）
+    if payload.get("sub") == "admin" and payload.get("role") == "admin":
+        return SimpleNamespace(id=0, role="admin", is_active=True)
+
+    from backend.models.user import User
+
+    result = await db.execute(select(User).where(User.id == payload.get("sub")))
+    user = result.scalar_one_or_none()
+    if not user or not user.is_active:
+        raise HTTPException(status_code=401, detail="用户不存在或已禁用")
     if user.role != "admin":
         raise HTTPException(status_code=403, detail="需要管理员权限")
     return user

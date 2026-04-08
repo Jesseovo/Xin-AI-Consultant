@@ -21,6 +21,8 @@ data/
 # === 运行时生成 ===
 backend/data/runtime_config.json
 backend/.pip_cache/
+_uvicorn_*.log
+_qa_*.py
 
 # === IDE ===
 .cursor/

@@ -113,9 +113,18 @@ export default function LoginPage() {
           <p className="mt-1 text-[14px] text-[--text-secondary]">智能教学平台</p>
         </div>
 
-        <div className="sf-card p-1 mb-6 flex rounded-2xl">
+        <div
+          className="sf-card p-1 mb-6 flex rounded-2xl"
+          role="tablist"
+          aria-label="登录或注册"
+        >
           <button
             type="button"
+            role="tab"
+            id="auth-tab-login"
+            aria-selected={tab === "login"}
+            aria-controls="auth-panel-login"
+            tabIndex={tab === "login" ? 0 : -1}
             onClick={() => { setTab("login"); setError(null); }}
             className={`flex-1 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${
               tab === "login" ? "bg-[--accent] text-white" : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
@@ -125,6 +134,11 @@ export default function LoginPage() {
           </button>
           <button
             type="button"
+            role="tab"
+            id="auth-tab-register"
+            aria-selected={tab === "register"}
+            aria-controls="auth-panel-register"
+            tabIndex={tab === "register" ? 0 : -1}
             onClick={() => { setTab("register"); setError(null); }}
             className={`flex-1 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${
               tab === "register" ? "bg-[--accent] text-white" : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
@@ -145,10 +159,19 @@ export default function LoginPage() {
           )}
 
           {tab === "login" ? (
-            <form onSubmit={submitLogin} className="space-y-4">
+            <form
+              id="auth-panel-login"
+              role="tabpanel"
+              aria-labelledby="auth-tab-login"
+              onSubmit={submitLogin}
+              className="space-y-4"
+            >
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">用户名</label>
+                <label htmlFor="login-username" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  用户名
+                </label>
                 <input
+                  id="login-username"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -157,8 +180,11 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">密码</label>
+                <label htmlFor="login-password" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  密码
+                </label>
                 <input
+                  id="login-password"
                   type="password"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={password}
@@ -176,10 +202,19 @@ export default function LoginPage() {
               </button>
             </form>
           ) : (
-            <form onSubmit={submitRegister} className="space-y-4">
+            <form
+              id="auth-panel-register"
+              role="tabpanel"
+              aria-labelledby="auth-tab-register"
+              onSubmit={submitRegister}
+              className="space-y-4"
+            >
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">用户名</label>
+                <label htmlFor="register-username" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  用户名
+                </label>
                 <input
+                  id="register-username"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -188,8 +223,11 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">密码</label>
+                <label htmlFor="register-password" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  密码
+                </label>
                 <input
+                  id="register-password"
                   type="password"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={password}
@@ -199,8 +237,11 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">显示名称</label>
+                <label htmlFor="register-display-name" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  显示名称
+                </label>
                 <input
+                  id="register-display-name"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
@@ -208,8 +249,11 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">角色</label>
+                <label htmlFor="register-role" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  角色
+                </label>
                 <select
+                  id="register-role"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={role}
                   onChange={(e) => setRole(e.target.value as "student" | "teacher")}
@@ -219,8 +263,11 @@ export default function LoginPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">院系</label>
+                <label htmlFor="register-department" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  院系
+                </label>
                 <input
+                  id="register-department"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
@@ -228,8 +275,11 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">专业</label>
+                <label htmlFor="register-major" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
+                  专业
+                </label>
                 <input
+                  id="register-major"
                   className="sf-input w-full px-4 py-3 text-[15px]"
                   value={major}
                   onChange={(e) => setMajor(e.target.value)}
