@@ -227,14 +227,16 @@ export default function LandingPage() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              {user ? "开始使用" : "立即开始"}
+              {user ? "进入平台" : "立即开始"}
             </motion.button>
-            <Link
-              href="/login"
-              className="px-8 py-3.5 rounded-2xl text-[15px] font-medium text-[--text-primary] no-underline text-center inline-flex items-center justify-center border border-[--border-subtle] hover:border-[--accent]/30 transition-colors"
-            >
-              {user ? "账号设置" : "登录 / 注册"}
-            </Link>
+            {!user && (
+              <Link
+                href="/login"
+                className="px-8 py-3.5 rounded-2xl text-[15px] font-medium text-[--text-primary] no-underline text-center inline-flex items-center justify-center border border-[--border-subtle] hover:border-[--accent]/30 transition-colors"
+              >
+                登录 / 注册
+              </Link>
+            )}
           </motion.div>
         </section>
 
