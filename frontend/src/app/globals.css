@@ -31,14 +31,15 @@
   --text-primary: #3e2c1c;
   --text-secondary: rgba(62, 44, 28, 0.58);
   --text-muted: rgba(62, 44, 28, 0.32);
-  --accent: #6B5234;
+  --accent: #5a3e22;
+  --accent-hover: #4a3018;
   --accent-secondary: #6ba89a;
-  --user-bubble: #6B5234;
-  --user-bubble-text: #ffffff;
+  --user-bubble: #5a3e22;
+  --user-bubble-text: #faf5ee;
   --user-avatar-bg: rgba(139, 111, 71, 0.06);
   --user-avatar-text: rgba(62, 44, 28, 0.35);
   --code-bg: rgba(139, 111, 71, 0.06);
-  --code-color: #6B5234;
+  --code-color: #5a3e22;
   --ring-avatar: rgba(139, 111, 71, 0.08);
   --shadow-avatar: rgba(93, 64, 55, 0.10);
   --ambient-a: rgba(168, 216, 234, 0.12);
@@ -154,7 +155,7 @@ body {
 .sf-input:focus {
   background: var(--input-focus-bg);
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(107, 82, 52, 0.18);
+  box-shadow: 0 0 0 3px rgba(90, 62, 34, 0.18);
   outline: none;
 }
 .sf-input::placeholder {

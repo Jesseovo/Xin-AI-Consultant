@@ -253,19 +253,19 @@ export default function LandingPage() {
         </section>
 
         {/* CTA */}
-        <section className="mt-24 sm:mt-32 rounded-3xl border border-[--border-subtle] bg-[--accent] px-6 py-14 sm:px-12 sm:py-16 text-center overflow-hidden relative">
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white leading-tight">
+        <section className="mt-24 sm:mt-32 rounded-3xl border border-[--border-subtle] bg-[--input-bg] px-6 py-14 sm:px-12 sm:py-16 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[--text-primary] leading-tight">
               <BreathingText text="准备好升级你的课堂了吗？" />
             </h2>
-            <p className="mt-4 text-[15px] text-white/75 max-w-md mx-auto">
+            <p className="mt-4 text-[15px] text-[--text-secondary] max-w-md mx-auto">
               <BreathingText text="加入夹心，用对话式 AI 连接每一名学生。" />
             </p>
             <div className="mt-10 flex justify-center">
               <motion.button
                 type="button"
                 onClick={() => router.push(user ? "/chat" : "/login")}
-                className="px-10 py-4 rounded-2xl bg-white text-[--accent] text-[15px] font-semibold"
+                className="px-10 py-4 rounded-2xl bg-[--accent] text-[--input-bg] text-[15px] font-semibold"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
