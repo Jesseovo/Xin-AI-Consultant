@@ -98,7 +98,7 @@ export default function NotebookPage() {
         <button
           type="button"
           onClick={() => setShowCreate(!showCreate)}
-          className="px-4 py-2 rounded-xl bg-[--accent] text-white text-[14px] font-medium transition-opacity hover:opacity-90"
+          className="px-4 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium transition-opacity hover:opacity-90"
         >
           + 新建
         </button>
@@ -161,7 +161,7 @@ export default function NotebookPage() {
                 type="button"
                 onClick={() => void handleCreate()}
                 disabled={creating || !newName.trim()}
-                className="px-5 py-2 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-40"
+                className="px-5 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-40"
               >
                 {creating ? "创建中…" : "创建"}
               </button>

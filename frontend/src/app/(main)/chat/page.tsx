@@ -87,7 +87,7 @@ export default function ChatSessionsPage() {
           type="button"
           onClick={newChat}
           disabled={creating}
-          className="shrink-0 px-4 py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-50"
+          className="shrink-0 px-4 py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-50"
         >
           {creating ? "创建中…" : "新对话"}
         </button>

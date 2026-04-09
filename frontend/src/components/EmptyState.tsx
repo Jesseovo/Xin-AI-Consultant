@@ -21,7 +21,7 @@ export default function EmptyState({ title, description, actionLabel, onAction, 
         <button
           type="button"
           onClick={onAction}
-          className="px-5 py-2.5 rounded-xl text-[14px] font-medium text-white transition-opacity hover:opacity-90"
+          className="px-5 py-2.5 rounded-xl text-[14px] font-medium text-[--accent-text] transition-opacity hover:opacity-90"
           style={{ background: "var(--accent)" }}
         >
           {actionLabel}

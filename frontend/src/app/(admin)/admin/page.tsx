@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
           type="button"
           onClick={() => void testConnection()}
           disabled={testing}
-          className="mt-4 px-4 py-2 rounded-xl bg-[--accent] text-white text-[13px] disabled:opacity-50"
+          className="mt-4 px-4 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[13px] disabled:opacity-50"
         >
           {testing ? "测试中…" : "测试连接"}
         </button>

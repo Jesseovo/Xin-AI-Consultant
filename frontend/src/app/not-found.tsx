@@ -8,7 +8,7 @@ export default function NotFound() {
       <p className="text-[14px] text-[--text-secondary] mb-6">你访问的页面可能已移除或地址有误</p>
       <Link
         href="/"
-        className="px-6 py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium no-underline"
+        className="px-6 py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium no-underline"
       >
         返回首页
       </Link>

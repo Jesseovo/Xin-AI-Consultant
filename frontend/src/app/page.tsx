@@ -112,7 +112,7 @@ export default function LandingPage() {
             onClick={() => router.push(user ? "/chat" : "/login")}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="px-4 py-2 rounded-full bg-[--accent] text-white text-[13px] font-medium"
+            className="px-4 py-2 rounded-full bg-[--accent] text-[--accent-text] text-[13px] font-medium"
           >
             {user ? "进入平台" : "登录"}
           </motion.button>
@@ -159,7 +159,7 @@ export default function LandingPage() {
             <motion.button
               type="button"
               onClick={() => router.push(user ? "/chat" : "/login")}
-              className="px-8 py-3.5 rounded-2xl bg-[--accent] text-white text-[15px] font-medium"
+              className="px-8 py-3.5 rounded-2xl bg-[--accent] text-[--accent-text] text-[15px] font-medium"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >

@@ -124,7 +124,7 @@ export default function LoginPage() {
               onClick={() => { setTab("login"); setError(null); }}
               className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
                 tab === "login"
-                  ? "bg-[--accent] text-white"
+                  ? "bg-[--accent] text-[--accent-text]"
                   : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
               }`}
             >
@@ -135,7 +135,7 @@ export default function LoginPage() {
               onClick={() => { setTab("register"); setError(null); }}
               className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
                 tab === "register"
-                  ? "bg-[--accent] text-white"
+                  ? "bg-[--accent] text-[--accent-text]"
                   : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
               }`}
             >
@@ -234,7 +234,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-[--accent] text-white text-[15px] font-medium disabled:opacity-50 transition-opacity"
+              className="w-full py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[15px] font-medium disabled:opacity-50 transition-opacity"
             >
               {loading ? "处理中…" : isRegister ? "注册" : "登录"}
             </button>

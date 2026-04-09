@@ -94,7 +94,7 @@ export default function WriterPage() {
             onClick={() => switchTab(tab.id)}
             className={`px-5 py-2 rounded-lg text-[14px] font-medium transition-all ${
               activeTab === tab.id
-                ? "bg-[--accent] text-white shadow-sm"
+                ? "bg-[--accent] text-[--accent-text] shadow-sm"
                 : "text-[--text-secondary] hover:text-[--text-primary]"
             }`}
           >
@@ -156,7 +156,7 @@ export default function WriterPage() {
             type="button"
             onClick={() => void handleSubmit()}
             disabled={processing || !inputText.trim()}
-            className="mt-4 px-6 py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-40 transition-opacity self-start"
+            className="mt-4 px-6 py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-40 transition-opacity self-start"
           >
             {processing ? "处理中…" : `开始${currentTab.label}`}
           </button>

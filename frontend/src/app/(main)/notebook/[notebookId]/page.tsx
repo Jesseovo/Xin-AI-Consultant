@@ -102,7 +102,7 @@ export default function NotebookDetailPage() {
           <button
             type="button"
             onClick={() => setShowAdd(!showAdd)}
-            className="px-4 py-2 rounded-xl bg-[--accent] text-white text-[13px] font-medium transition-opacity hover:opacity-90"
+            className="px-4 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[13px] font-medium transition-opacity hover:opacity-90"
           >
             + 添加记录
           </button>
@@ -157,7 +157,7 @@ export default function NotebookDetailPage() {
                 type="button"
                 onClick={() => void handleAdd()}
                 disabled={adding || !newContent.trim()}
-                className="px-5 py-2 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-40"
+                className="px-5 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-40"
               >
                 {adding ? "保存中…" : "保存"}
               </button>

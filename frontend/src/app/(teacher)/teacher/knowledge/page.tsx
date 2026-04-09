@@ -104,7 +104,7 @@ export default function TeacherKnowledgePage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <button type="submit" className="px-5 py-3 rounded-xl bg-[--accent] text-white text-[14px] font-medium shrink-0">
+        <button type="submit" className="px-5 py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium shrink-0">
           创建
         </button>
       </form>

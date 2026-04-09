@@ -286,7 +286,7 @@ export default function QuizDetailPage() {
               type="button"
               onClick={() => void handleSubmit()}
               disabled={submitting || answeredCount === 0}
-              className="px-6 py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-40 transition-opacity"
+              className="px-6 py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-40 transition-opacity"
             >
               {submitting ? "提交中…" : `提交答案 (${answeredCount}/${totalQ})`}
             </button>

@@ -91,7 +91,7 @@ export default function FileUploader({ onUpload, accept = DEFAULT_ACCEPT }: File
             type="button"
             disabled={uploading}
             onClick={() => void handleUpload()}
-            className="shrink-0 px-4 py-2 rounded-xl text-[13px] font-medium text-white disabled:opacity-50 transition-opacity hover:opacity-90"
+            className="shrink-0 px-4 py-2 rounded-xl text-[13px] font-medium text-[--accent-text] disabled:opacity-50 transition-opacity hover:opacity-90"
             style={{ background: "var(--accent)" }}
           >
             {uploading ? "上传中…" : "上传"}

@@ -63,7 +63,7 @@ export default function BotCard({
         <button
           type="button"
           onClick={() => onChat(id)}
-          className="text-[13px] font-medium px-4 py-2 rounded-xl text-white transition-opacity hover:opacity-90"
+          className="text-[13px] font-medium px-4 py-2 rounded-xl text-[--accent-text] transition-opacity hover:opacity-90"
           style={{ background: "var(--accent)" }}
         >
           开始对话

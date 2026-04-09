@@ -146,7 +146,7 @@ export default function QuizPage() {
             type="button"
             onClick={() => void handleGenerate()}
             disabled={generating || !topic.trim()}
-            className="px-6 py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium disabled:opacity-40 transition-opacity"
+            className="px-6 py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium disabled:opacity-40 transition-opacity"
           >
             {generating ? "生成中…" : "生成测验"}
           </button>

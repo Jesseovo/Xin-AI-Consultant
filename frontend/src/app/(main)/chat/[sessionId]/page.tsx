@@ -202,7 +202,7 @@ export default function ChatSessionPage() {
             <button
               type="button"
               onClick={() => void loadHistory()}
-              className="mt-2 px-3 py-1.5 rounded-lg bg-[--accent] text-white text-[12px] font-medium"
+              className="mt-2 px-3 py-1.5 rounded-lg bg-[--accent] text-[--accent-text] text-[12px] font-medium"
             >
               重试加载
             </button>
@@ -282,7 +282,7 @@ export default function ChatSessionPage() {
             type="button"
             onClick={() => void send()}
             disabled={!input.trim() || streaming}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-[--accent] text-white disabled:opacity-30 shrink-0"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-[--accent] text-[--accent-text] disabled:opacity-30 shrink-0"
             aria-label="发送"
           >
             <IconSend className="w-5 h-5" />

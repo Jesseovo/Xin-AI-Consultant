@@ -209,7 +209,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
             {isStreaming ? (
               <button
                 onClick={abort}
-                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-red-500 hover:bg-red-600 text-white rounded-xl transition-colors"
+                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-red-500 hover:bg-red-600 text-[--accent-text] rounded-xl transition-colors"
                 aria-label="停止生成"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -220,7 +220,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
               <button
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim()}
-                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-white rounded-xl transition-colors"
+                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-[--accent-text] rounded-xl transition-colors"
                 aria-label="发送"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

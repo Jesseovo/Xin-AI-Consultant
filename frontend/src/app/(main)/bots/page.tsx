@@ -182,7 +182,7 @@ export default function BotsGalleryPage() {
               <button
                 type="button"
                 onClick={() => void startChat(b.id)}
-                className="mt-4 w-full py-2.5 rounded-xl bg-[--accent] text-white text-[14px] font-medium"
+                className="mt-4 w-full py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium"
               >
                 开始对话
               </button>

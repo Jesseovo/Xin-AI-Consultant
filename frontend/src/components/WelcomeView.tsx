@@ -132,7 +132,7 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
             <button
               onClick={handleSubmit}
               disabled={!input.trim()}
-              className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-white rounded-xl transition-colors"
+              className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-[--accent-text] rounded-xl transition-colors"
               aria-label="发送"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -103,7 +103,7 @@ export default function TeacherBotsPage() {
             placeholder="数学, 高数"
           />
         </div>
-        <button type="submit" className="w-full py-3 rounded-xl bg-[--accent] text-white text-[14px] font-medium">
+        <button type="submit" className="w-full py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium">
           创建
         </button>
       </form>
