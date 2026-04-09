@@ -106,9 +106,14 @@ export default function BotsGalleryPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">导师机器人</h1>
-        <p className="text-[13px] text-[--text-secondary] mt-0.5">选择学科与机器人，开始个性化辅导</p>
+      <div className="rounded-2xl overflow-hidden mb-6 relative h-32">
+        <img src="/images/bots/bot-card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="relative z-10 flex items-end h-full px-6 pb-4">
+          <div>
+            <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">导师机器人</h1>
+            <p className="text-[13px] text-[--text-secondary] mt-0.5">选择学科与机器人，开始个性化辅导</p>
+          </div>
+        </div>
       </div>
 
       {isDemo && (

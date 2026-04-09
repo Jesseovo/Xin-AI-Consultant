@@ -21,26 +21,14 @@ import {
 } from "@/components/TextEffects";
 
 const FEATURES = [
-  {
-    title: "智能对话",
-    desc: "与 TutorBot 自然交流，随时答疑。",
-    img: "/images/modes/chat.png",
-  },
-  {
-    title: "深度解题",
-    desc: "分步推理与考点拆解。",
-    img: "/images/modes/deep-solve.png",
-  },
-  {
-    title: "测验模式",
-    desc: "自测与知识点巩固。",
-    img: "/images/modes/quiz.png",
-  },
-  {
-    title: "研究与写作",
-    desc: "资料整理与文稿辅助。",
-    img: "/images/modes/deep-research.png",
-  },
+  { title: "智能对话", desc: "与 TutorBot 自然交流，随时答疑。", img: "/images/modes/chat.png" },
+  { title: "深度解题", desc: "分步推理与考点拆解。", img: "/images/modes/deep-solve.png" },
+  { title: "测验模式", desc: "自测与知识点巩固。", img: "/images/modes/quiz.png" },
+  { title: "深度研究", desc: "文献检索与资料整理。", img: "/images/modes/deep-research.png" },
+  { title: "写作助手", desc: "改写、扩写、摘要与翻译。", img: "/images/modes/co-writer.png" },
+  { title: "引导式学习", desc: "分步计划与知识展开。", img: "/images/modes/guided.png" },
+  { title: "笔记本", desc: "整理和管理学习笔记。", img: "/images/modes/notebook.png" },
+  { title: "知识库", desc: "文档向量化与智能检索。", img: "/images/modes/knowledge.png" },
 ] as const;
 
 const STATS = [
@@ -216,7 +204,12 @@ export default function LandingPage() {
               <img
                 src="/images/platform/hero.png"
                 alt="夹心智能教学平台"
-                className="w-full h-auto object-cover"
+                className="hidden sm:block w-full h-auto object-cover"
+              />
+              <img
+                src="/images/platform/hero-mobile.png"
+                alt="夹心智能教学平台"
+                className="sm:hidden w-full h-auto object-cover"
               />
             </div>
           </FadeInSection>
@@ -230,23 +223,15 @@ export default function LandingPage() {
             <motion.button
               type="button"
               onClick={() => router.push(user ? "/chat" : "/login")}
-              className="px-8 py-3.5 rounded-2xl text-white text-[15px] font-medium bg-gradient-to-r from-amber-700 via-yellow-700 to-orange-600 shadow-xl shadow-amber-700/30"
-              animate={{
-                boxShadow: [
-                  "0 20px 50px -12px rgba(139,111,71,0.45)",
-                  "0 24px 60px -10px rgba(196,149,106,0.5)",
-                  "0 20px 50px -12px rgba(139,111,71,0.45)",
-                ],
-              }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="px-8 py-3.5 rounded-2xl bg-[--accent] text-white text-[15px] font-medium"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
               {user ? "开始使用" : "立即开始"}
             </motion.button>
             <Link
               href="/login"
-              className="px-8 py-3.5 rounded-2xl sf-glass text-[15px] font-medium text-[--text-primary] no-underline text-center inline-flex items-center justify-center border border-[--border-subtle] hover:border-[--accent]/30 transition-colors"
+              className="px-8 py-3.5 rounded-2xl text-[15px] font-medium text-[--text-primary] no-underline text-center inline-flex items-center justify-center border border-[--border-subtle] hover:border-[--accent]/30 transition-colors"
             >
               {user ? "账号设置" : "登录 / 注册"}
             </Link>
@@ -262,7 +247,7 @@ export default function LandingPage() {
             {STATS.map((s, i) => (
               <FadeInSection key={s.label} delay={i * 0.08}>
                 <div className="rounded-2xl border border-[--border-subtle] bg-[--bg-card]/60 backdrop-blur-xl px-6 py-8 text-center">
-                  <p className="text-3xl sm:text-4xl font-semibold tabular-nums bg-gradient-to-r from-amber-700 via-yellow-600 to-orange-500 bg-clip-text text-transparent dark:from-amber-400 dark:via-yellow-400 dark:to-orange-400">
+                  <p className="text-3xl sm:text-4xl font-semibold tabular-nums text-[--accent]">
                     <CountUp end={s.end} duration={2.2} suffix={s.suffix} />
                   </p>
                   <p className="mt-2 text-[13px] text-[--text-secondary]">{s.label}</p>
@@ -310,29 +295,21 @@ export default function LandingPage() {
             <h2 className="text-xl sm:text-2xl font-semibold text-[--text-primary]">能力亮点</h2>
             <p className="mt-2 text-[14px] text-[--text-secondary]">为教学场景打造的流畅体验</p>
           </FadeInSection>
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-5">
             {FEATURES.map((f, i) => (
               <FadeInSection key={f.title} delay={i * 0.06}>
-                <FloatingCard delay={i * 0.08}>
-                  <div className="rounded-2xl border border-[--border-subtle] bg-[--bg-card]/70 backdrop-blur-xl p-6 sm:p-7 h-full group">
-                    <motion.div
-                      className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl overflow-hidden"
-                      whileHover={{ scale: 1.08, rotate: -4 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 18 }}
-                    >
-                      <img src={f.img} alt={f.title} className="w-full h-full object-contain" />
-                    </motion.div>
-                    <h3 className="text-[16px] font-semibold text-[--text-primary]">{f.title}</h3>
-                    <p className="text-[13px] sm:text-[14px] text-[--text-secondary] mt-2 leading-relaxed">{f.desc}</p>
-                  </div>
-                </FloatingCard>
+                <div className="rounded-2xl border border-[--border-subtle] bg-[--bg-card]/70 backdrop-blur-xl p-4 sm:p-5 h-full text-center">
+                    <img src={f.img} alt={f.title} className="w-12 h-12 mx-auto mb-3 object-contain" />
+                    <h3 className="text-[14px] font-semibold text-[--text-primary]">{f.title}</h3>
+                    <p className="text-[12px] text-[--text-secondary] mt-1 leading-relaxed">{f.desc}</p>
+                </div>
               </FadeInSection>
             ))}
           </div>
         </section>
 
         {/* CTA */}
-        <section className="mt-24 sm:mt-32 rounded-3xl border border-[--border-subtle] bg-gradient-to-br from-amber-100/40 via-sky-100/30 to-orange-100/40 dark:from-amber-900/15 dark:via-sky-900/10 dark:to-orange-900/15 px-6 py-14 sm:px-12 sm:py-16 text-center backdrop-blur-xl overflow-hidden relative">
+        <section className="mt-24 sm:mt-32 rounded-3xl border border-[--border-subtle] bg-[--bg-card] px-6 py-14 sm:px-12 sm:py-16 text-center overflow-hidden relative">
           <div className="pointer-events-none absolute inset-0 bg-[--bg-primary]/40" />
           <div className="relative z-10 max-w-2xl mx-auto">
             <AnimatedTitle
@@ -344,21 +321,17 @@ export default function LandingPage() {
               <TextReveal text="加入夹心，用对话式 AI 连接每一名学生。" className="block" />
               <TextReveal text="从备课到答疑，全流程加速。" className="block mt-1" />
             </div>
-            <motion.div
-              className="mt-10 flex justify-center"
-              animate={{ scale: [1, 1.03, 1] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-            >
+            <div className="mt-10 flex justify-center">
               <motion.button
                 type="button"
                 onClick={() => router.push(user ? "/chat" : "/login")}
-                className="px-10 py-4 rounded-2xl text-white text-[15px] font-semibold bg-gradient-to-r from-amber-700 via-yellow-700 to-orange-600 shadow-lg shadow-amber-700/35"
-                whileHover={{ scale: 1.05 }}
+                className="px-10 py-4 rounded-2xl bg-[--accent] text-white text-[15px] font-semibold"
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
                 {user ? "进入对话" : "免费开始"}
               </motion.button>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>

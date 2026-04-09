@@ -54,6 +54,9 @@ export default function TeacherDashboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="rounded-2xl overflow-hidden mb-8">
+        <img src="/images/teacher/dashboard-header.png" alt="" className="w-full h-36 object-cover" />
+      </div>
       <h1 className="text-[22px] font-semibold text-[--text-primary]">工作台</h1>
       <p className="text-[13px] text-[--text-secondary] mt-0.5 mb-8">总览您的教学内容与使用数据</p>
 
@@ -67,13 +70,19 @@ export default function TeacherDashboardPage() {
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4 mb-10">
-        <Link href="/teacher/bots" className="sf-card rounded-2xl p-5 block text-center no-underline hover:scale-[1.02]">
-          <p className="text-[15px] font-medium text-[--accent]">创建机器人</p>
-          <p className="text-[12px] text-[--text-muted] mt-1">配置导师人格与知识范围</p>
+        <Link href="/teacher/bots" className="sf-card rounded-2xl overflow-hidden block no-underline hover:scale-[1.02]">
+          <img src="/images/teacher/create-bot-guide.png" alt="" className="w-full h-28 object-cover" />
+          <div className="p-4 text-center">
+            <p className="text-[15px] font-medium text-[--accent]">创建机器人</p>
+            <p className="text-[12px] text-[--text-muted] mt-1">配置导师人格与知识范围</p>
+          </div>
         </Link>
-        <Link href="/teacher/knowledge" className="sf-card rounded-2xl p-5 block text-center no-underline hover:scale-[1.02]">
-          <p className="text-[15px] font-medium text-[--accent]">上传知识</p>
-          <p className="text-[12px] text-[--text-muted] mt-1">文档解析与向量化</p>
+        <Link href="/teacher/knowledge" className="sf-card rounded-2xl overflow-hidden block no-underline hover:scale-[1.02]">
+          <img src="/images/teacher/upload-guide.png" alt="" className="w-full h-28 object-cover" />
+          <div className="p-4 text-center">
+            <p className="text-[15px] font-medium text-[--accent]">上传知识</p>
+            <p className="text-[12px] text-[--text-muted] mt-1">文档解析与向量化</p>
+          </div>
         </Link>
       </div>
 

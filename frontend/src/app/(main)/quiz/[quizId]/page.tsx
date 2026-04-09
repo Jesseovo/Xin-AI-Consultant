@@ -163,6 +163,7 @@ export default function QuizDetailPage() {
         <div className="mb-6 rounded-2xl p-6 text-center border border-[--border-subtle]"
           style={{ background: "linear-gradient(135deg, var(--ambient-a) 0%, var(--bg-card) 100%)" }}
         >
+          <img src="/images/student/quiz-complete.png" alt="" className="w-20 h-20 mx-auto mb-3 object-contain" />
           <p className="text-[14px] text-[--text-secondary] mb-1">得分</p>
           <p className="text-[36px] font-bold text-[--accent]">
             {score}<span className="text-[18px] text-[--text-muted] font-normal"> / {total}</span>

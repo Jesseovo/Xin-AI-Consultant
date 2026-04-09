@@ -121,6 +121,7 @@ export default function TeacherKnowledgePage() {
           void uploadFiles(e.dataTransfer.files);
         }}
       >
+        <img src="/images/teacher/upload-guide.png" alt="" className="w-20 h-20 mx-auto mb-3 object-contain" />
         <p className="text-[14px] text-[--text-primary] font-medium">拖放文件到此处上传</p>
         <p className="text-[12px] text-[--text-muted] mt-1">或选择文件（将关联到列表中的第一个知识库）</p>
         <label className="mt-4 inline-block">
@@ -136,6 +137,12 @@ export default function TeacherKnowledgePage() {
         </label>
       </div>
 
+      {list.length === 0 && (
+        <div className="sf-card rounded-2xl p-8 text-center mb-4">
+          <img src="/images/platform/empty-kb.png" alt="" className="w-24 h-24 mx-auto mb-4 object-contain" />
+          <p className="text-[14px] text-[--text-secondary]">暂无知识库，请创建一个</p>
+        </div>
+      )}
       <ul className="space-y-3">
         {list.map((kb) => (
           <li key={kb.id} className="sf-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">

@@ -6,24 +6,21 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "@/lib/auth-store";
 import { useTheme } from "@/lib/theme";
 import {
-  IconBook,
-  IconBot,
   IconLogOut,
   IconMenu,
   IconMoon,
   IconPanelLeft,
-  IconSparkles,
   IconSun,
   IconX,
 } from "@/components/ui-icons";
 
 const NAV = [
-  { href: "/chat", label: "对话", Icon: IconSparkles },
-  { href: "/bots", label: "导师机器人", Icon: IconBot },
-  { href: "/quiz", label: "测验", Icon: IconBook },
-  { href: "/notebook", label: "笔记本", Icon: IconBook },
-  { href: "/writer", label: "写作", Icon: IconBook },
-  { href: "/learning", label: "学习", Icon: IconBook },
+  { href: "/chat", label: "对话", img: "/images/modes/chat.png" },
+  { href: "/bots", label: "导师机器人", img: "/images/bots/default-bot.png" },
+  { href: "/quiz", label: "测验", img: "/images/modes/quiz.png" },
+  { href: "/notebook", label: "笔记本", img: "/images/modes/notebook.png" },
+  { href: "/writer", label: "写作", img: "/images/modes/co-writer.png" },
+  { href: "/learning", label: "学习", img: "/images/modes/guided.png" },
 ] as const;
 
 function ThemeToggleBtn() {
@@ -118,7 +115,7 @@ export default function MainAppShell({ children }: { children: ReactNode }) {
         </div>
 
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-          {NAV.map(({ href, label, Icon }) => {
+          {NAV.map(({ href, label, img }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
               <Link
@@ -132,7 +129,7 @@ export default function MainAppShell({ children }: { children: ReactNode }) {
                 `}
                 title={collapsed ? label : undefined}
               >
-                <Icon className="w-5 h-5 shrink-0 opacity-90" />
+                <img src={img} alt="" className="w-5 h-5 shrink-0 object-contain" />
                 <span className={`truncate ${collapsed ? "lg:hidden" : ""}`}>{label}</span>
               </Link>
             );

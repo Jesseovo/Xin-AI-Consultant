@@ -101,32 +101,36 @@ export function FadeInSection({
 
 export function GradientText({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span
-      className={`bg-gradient-to-r from-amber-700 via-yellow-700 to-orange-600 bg-clip-text text-transparent dark:from-amber-400 dark:via-yellow-400 dark:to-orange-400 ${className ?? ""}`}
-    >
+    <span className={`text-[--accent] font-semibold ${className ?? ""}`}>
       {children}
     </span>
   );
 }
 
 export function BreathingText({ text, className }: { text: string; className?: string }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <span className={className}>
+    <span
+      className={className}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       {text.split("").map((char, i) => (
         <motion.span
           key={`${char}-${i}`}
           className="inline-block"
           style={{ whiteSpace: char === " " ? "pre" : undefined }}
-          animate={{
-            y: [0, -3, 0],
-            opacity: [0.7, 1, 0.7],
-          }}
-          transition={{
-            duration: 2.8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.06,
-          }}
+          animate={
+            hovered
+              ? { y: [0, -4, 0], opacity: [0.8, 1, 0.8] }
+              : { y: 0, opacity: 1 }
+          }
+          transition={
+            hovered
+              ? { duration: 0.5, ease: "easeInOut", delay: i * 0.03 }
+              : { duration: 0.3 }
+          }
         >
           {char}
         </motion.span>

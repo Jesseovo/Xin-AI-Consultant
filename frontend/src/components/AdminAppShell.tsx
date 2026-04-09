@@ -71,7 +71,10 @@ export default function AdminAppShell({ children }: { children: ReactNode }) {
         `}
       >
         <div className="h-14 px-3 flex items-center justify-between border-b border-[--border-subtle]">
-          <span className="font-semibold">系统管理</span>
+          <span className="flex items-center gap-2 font-semibold">
+            <img src="/images/admin/admin-logo.png" alt="" className="w-6 h-6 object-contain" />
+            系统管理
+          </span>
           <button type="button" className="lg:hidden p-2 rounded-lg hover:bg-[--bg-card-hover]" onClick={() => setOpen(false)} aria-label="关闭">
             <IconX className="w-5 h-5" />
           </button>

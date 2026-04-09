@@ -212,6 +212,13 @@ export default function LearningPage() {
               );
             })}
           </div>
+
+          {Object.keys(expanded).length === steps.length && steps.length > 0 && (
+            <div className="mt-6 rounded-2xl p-6 text-center border border-[--border-subtle]">
+              <img src="/images/student/learning-complete.png" alt="" className="w-20 h-20 mx-auto mb-3 object-contain" />
+              <p className="text-[14px] font-medium text-[--accent]">所有步骤已展开，学习完成！</p>
+            </div>
+          )}
         </div>
       )}
 
