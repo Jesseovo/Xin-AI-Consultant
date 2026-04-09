@@ -112,7 +112,7 @@ export default function LearningPage() {
           <div>
             <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">学习主题</label>
             <input
-              className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
+              className="sf-input w-full px-4 py-3 text-[15px]"
               placeholder="例：递归与分治算法"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
@@ -122,7 +122,7 @@ export default function LearningPage() {
           <div>
             <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">步骤数</label>
             <select
-              className="sf-input px-3 py-2.5 text-[14px] border border-[--border-subtle]"
+              className="sf-input px-3 py-2.5 text-[14px]"
               value={numSteps}
               onChange={(e) => setNumSteps(Number(e.target.value))}
             >

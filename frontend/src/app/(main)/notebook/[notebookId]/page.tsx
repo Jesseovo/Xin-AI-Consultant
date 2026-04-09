@@ -123,7 +123,7 @@ export default function NotebookDetailPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">标题（可选）</label>
               <input
-                className="sf-input w-full px-4 py-2.5 text-[14px] border border-[--border-subtle]"
+                className="sf-input w-full px-4 py-2.5 text-[14px]"
                 placeholder="笔记标题…"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
@@ -132,7 +132,7 @@ export default function NotebookDetailPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">内容</label>
               <textarea
-                className="sf-input w-full px-4 py-3 text-[14px] border border-[--border-subtle] min-h-[120px] resize-y"
+                className="sf-input w-full px-4 py-3 text-[14px] min-h-[120px] resize-y"
                 placeholder="记录内容…"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
@@ -141,7 +141,7 @@ export default function NotebookDetailPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">标签（可选，逗号分隔）</label>
               <input
-                className="sf-input w-full px-4 py-2.5 text-[14px] border border-[--border-subtle]"
+                className="sf-input w-full px-4 py-2.5 text-[14px]"
                 placeholder="例：排序, 算法"
                 value={newTags}
                 onChange={(e) => setNewTags(e.target.value)}

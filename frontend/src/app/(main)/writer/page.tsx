@@ -112,7 +112,7 @@ export default function WriterPage() {
             <span className="text-[11px] text-[--text-muted]">{inputText.length} 字</span>
           </div>
           <textarea
-            className="sf-input flex-1 w-full px-4 py-3 text-[14px] border border-[--border-subtle] min-h-[240px] resize-y"
+            className="sf-input flex-1 w-full px-4 py-3 text-[14px] min-h-[240px] resize-y"
             placeholder={currentTab.placeholder}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
@@ -123,7 +123,7 @@ export default function WriterPage() {
             <div className="mt-3">
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">改写指令（可选）</label>
               <input
-                className="sf-input w-full px-3 py-2.5 text-[13px] border border-[--border-subtle]"
+                className="sf-input w-full px-3 py-2.5 text-[13px]"
                 placeholder="例：使语气更正式 / 简化表达 / 增加学术性"
                 value={instruction}
                 onChange={(e) => setInstruction(e.target.value)}
@@ -135,7 +135,7 @@ export default function WriterPage() {
             <div className="mt-3">
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">目标语言</label>
               <select
-                className="sf-input px-3 py-2.5 text-[13px] border border-[--border-subtle]"
+                className="sf-input px-3 py-2.5 text-[13px]"
                 value={targetLang}
                 onChange={(e) => setTargetLang(e.target.value)}
               >

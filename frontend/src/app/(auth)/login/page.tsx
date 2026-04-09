@@ -88,9 +88,11 @@ export default function LoginPage() {
     [register, username, password, displayName, role, department, major, router]
   );
 
+  const isRegister = tab === "register";
+
   return (
     <div className="min-h-screen flex bg-[--bg-primary]">
-      {/* Left side — login-bg illustration (hidden on mobile) */}
+      {/* Left illustration */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <img
           src="/images/platform/login-bg.png"
@@ -99,219 +101,148 @@ export default function LoginPage() {
         />
       </div>
 
-      {/* Right side — form */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 relative">
+      {/* Right form */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
         <div className="absolute top-4 right-4 z-10">
           <ThemeToggle />
         </div>
 
-        <div className="w-full max-w-md">
-          {/* Logo + title */}
-          <div className="text-center mb-8">
+        <div className="w-full max-w-sm">
+          {/* Logo */}
+          <div className="text-center mb-6">
             <Link href="/" className="inline-block">
-              <img
-                src="/images/platform/logo.png"
-                alt="夹心 Logo"
-                className="w-16 h-16 mx-auto mb-3 object-contain"
-              />
+              <img src="/images/platform/logo.png" alt="夹心" className="w-14 h-14 mx-auto mb-2 object-contain" />
             </Link>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[--text-primary]">
-              夹心
-            </h1>
-            <p className="mt-1 text-[14px] text-[--text-secondary]">智能教学平台</p>
+            <h1 className="text-[20px] font-semibold text-[--text-primary]">夹心</h1>
+            <p className="text-[13px] text-[--text-secondary]">智能教学平台</p>
           </div>
 
-          {/* Tab switcher */}
-          <div
-            className="rounded-2xl p-1 mb-6 flex border border-[--border-subtle] bg-[--bg-card]/60"
-            role="tablist"
-            aria-label="登录或注册"
-          >
+          {/* Tab bar */}
+          <div className="flex rounded-xl overflow-hidden border border-[--border-subtle] mb-5">
             <button
               type="button"
-              role="tab"
-              id="auth-tab-login"
-              aria-selected={tab === "login"}
-              aria-controls="auth-panel-login"
-              tabIndex={tab === "login" ? 0 : -1}
               onClick={() => { setTab("login"); setError(null); }}
-              className={`flex-1 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${
-                tab === "login" ? "bg-[--accent] text-white shadow-sm" : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
+              className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
+                tab === "login"
+                  ? "bg-[--accent] text-white"
+                  : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
               }`}
             >
               登录
             </button>
             <button
               type="button"
-              role="tab"
-              id="auth-tab-register"
-              aria-selected={tab === "register"}
-              aria-controls="auth-panel-register"
-              tabIndex={tab === "register" ? 0 : -1}
               onClick={() => { setTab("register"); setError(null); }}
-              className={`flex-1 py-2.5 rounded-xl text-[14px] font-medium transition-colors ${
-                tab === "register" ? "bg-[--accent] text-white shadow-sm" : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
+              className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
+                tab === "register"
+                  ? "bg-[--accent] text-white"
+                  : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
               }`}
             >
               注册
             </button>
           </div>
 
-          {/* Form card */}
-          <div className="rounded-2xl p-6 sm:p-8 border border-[--border-subtle] bg-[--bg-card]/60 backdrop-blur-xl shadow-lg shadow-[--accent]/5">
+          {/* Unified form card */}
+          <form
+            onSubmit={isRegister ? submitRegister : submitLogin}
+            className="rounded-2xl border border-[--border-subtle] bg-white/60 dark:bg-white/5 p-6 space-y-3.5"
+          >
             {error && (
-              <div
-                className="mb-4 px-3 py-2 rounded-xl text-[13px] text-red-700 dark:text-red-300 bg-red-500/10 border border-red-500/20"
-                role="alert"
-              >
+              <div className="px-3 py-2 rounded-lg text-[13px] text-red-700 dark:text-red-300 bg-red-500/10 border border-red-500/20">
                 {error}
               </div>
             )}
 
-            {tab === "login" ? (
-              <form
-                id="auth-panel-login"
-                role="tabpanel"
-                aria-labelledby="auth-tab-login"
-                onSubmit={submitLogin}
-                className="space-y-4"
-              >
+            {/* Username — always visible */}
+            <div>
+              <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">用户名</label>
+              <input
+                className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                placeholder="请输入用户名"
+                required
+              />
+            </div>
+
+            {/* Password — always visible */}
+            <div>
+              <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">密码</label>
+              <input
+                type="password"
+                className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete={isRegister ? "new-password" : "current-password"}
+                placeholder="请输入密码"
+                required
+              />
+            </div>
+
+            {/* Register-only fields */}
+            {isRegister && (
+              <>
                 <div>
-                  <label htmlFor="login-username" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    用户名
-                  </label>
+                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">显示名称</label>
                   <input
-                    id="login-username"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    autoComplete="username"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="login-password" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    密码
-                  </label>
-                  <input
-                    id="login-password"
-                    type="password"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 rounded-xl bg-[--accent] text-white text-[15px] font-medium disabled:opacity-50 transition-opacity shadow-md shadow-[--accent]/20"
-                >
-                  {loading ? "处理中…" : "登录"}
-                </button>
-              </form>
-            ) : (
-              <form
-                id="auth-panel-register"
-                role="tabpanel"
-                aria-labelledby="auth-tab-register"
-                onSubmit={submitRegister}
-                className="space-y-4"
-              >
-                <div>
-                  <label htmlFor="register-username" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    用户名
-                  </label>
-                  <input
-                    id="register-username"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    autoComplete="username"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="register-password" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    密码
-                  </label>
-                  <input
-                    id="register-password"
-                    type="password"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="new-password"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="register-display-name" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    显示名称
-                  </label>
-                  <input
-                    id="register-display-name"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
+                    className="sf-input w-full px-3.5 py-2.5 text-[14px]"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="你的昵称"
                     required
                   />
                 </div>
-                <div>
-                  <label htmlFor="register-role" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    角色
-                  </label>
-                  <select
-                    id="register-role"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value as "student" | "teacher")}
-                  >
-                    <option value="student">学生</option>
-                    <option value="teacher">教师</option>
-                  </select>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">角色</label>
+                    <select
+                      className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value as "student" | "teacher")}
+                    >
+                      <option value="student">学生</option>
+                      <option value="teacher">教师</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">院系</label>
+                    <input
+                      className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      placeholder="计算机学院"
+                      required
+                    />
+                  </div>
                 </div>
                 <div>
-                  <label htmlFor="register-department" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    院系
-                  </label>
+                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">专业</label>
                   <input
-                    id="register-department"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="register-major" className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">
-                    专业
-                  </label>
-                  <input
-                    id="register-major"
-                    className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
+                    className="sf-input w-full px-3.5 py-2.5 text-[14px]"
                     value={major}
                     onChange={(e) => setMajor(e.target.value)}
+                    placeholder="软件工程"
                     required
                   />
                 </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 rounded-xl bg-[--accent] text-white text-[15px] font-medium disabled:opacity-50 transition-opacity shadow-md shadow-[--accent]/20"
-                >
-                  {loading ? "处理中…" : "注册"}
-                </button>
-              </form>
+              </>
             )}
 
-            <p className="mt-6 text-center text-[13px] text-[--text-muted]">
-              <Link href="/" className="text-[--accent] hover:underline">
-                返回首页
-              </Link>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl bg-[--accent] text-white text-[15px] font-medium disabled:opacity-50 transition-opacity"
+            >
+              {loading ? "处理中…" : isRegister ? "注册" : "登录"}
+            </button>
+
+            <p className="text-center text-[12px] text-[--text-muted] pt-1">
+              <Link href="/" className="text-[--accent] hover:underline">返回首页</Link>
             </p>
-          </div>
+          </form>
         </div>
       </div>
     </div>

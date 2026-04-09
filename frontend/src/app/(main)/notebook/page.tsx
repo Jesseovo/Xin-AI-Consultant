@@ -118,7 +118,7 @@ export default function NotebookPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">名称</label>
               <input
-                className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
+                className="sf-input w-full px-4 py-3 text-[15px]"
                 placeholder="例：数据结构笔记"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
@@ -128,7 +128,7 @@ export default function NotebookPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">描述（可选）</label>
               <input
-                className="sf-input w-full px-4 py-2.5 text-[14px] border border-[--border-subtle]"
+                className="sf-input w-full px-4 py-2.5 text-[14px]"
                 placeholder="笔记本简介…"
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}

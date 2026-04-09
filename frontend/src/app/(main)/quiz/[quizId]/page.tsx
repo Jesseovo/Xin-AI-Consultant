@@ -248,7 +248,7 @@ export default function QuizDetailPage() {
                   </div>
                 ) : (
                   <input
-                    className="sf-input w-full px-3 py-2.5 text-[14px] border border-[--border-subtle]"
+                    className="sf-input w-full px-3 py-2.5 text-[14px]"
                     placeholder="输入答案…"
                     value={answers[i] || ""}
                     onChange={(e) => setAnswer(i, e.target.value)}

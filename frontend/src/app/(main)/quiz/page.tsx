@@ -97,7 +97,7 @@ export default function QuizPage() {
           <div>
             <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">测验主题</label>
             <input
-              className="sf-input w-full px-4 py-3 text-[15px] border border-[--border-subtle]"
+              className="sf-input w-full px-4 py-3 text-[15px]"
               placeholder="例：数据结构中的排序算法"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
@@ -108,7 +108,7 @@ export default function QuizPage() {
             <div>
               <label className="block text-[12px] font-medium text-[--text-secondary] mb-1.5">题目数量</label>
               <select
-                className="sf-input px-3 py-2.5 text-[14px] border border-[--border-subtle]"
+                className="sf-input px-3 py-2.5 text-[14px]"
                 value={numQ}
                 onChange={(e) => setNumQ(Number(e.target.value))}
               >

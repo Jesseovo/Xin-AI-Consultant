@@ -27,18 +27,18 @@
   --bg-elevated: rgba(245, 240, 235, 0.82);
   --bg-card: rgba(139, 111, 71, 0.04);
   --bg-card-hover: rgba(139, 111, 71, 0.08);
-  --border-subtle: rgba(139, 111, 71, 0.10);
+  --border-subtle: rgba(139, 111, 71, 0.14);
   --text-primary: #3e2c1c;
   --text-secondary: rgba(62, 44, 28, 0.58);
   --text-muted: rgba(62, 44, 28, 0.32);
-  --accent: #8B6F47;
+  --accent: #6B5234;
   --accent-secondary: #6ba89a;
-  --user-bubble: #8B6F47;
+  --user-bubble: #6B5234;
   --user-bubble-text: #ffffff;
   --user-avatar-bg: rgba(139, 111, 71, 0.06);
   --user-avatar-text: rgba(62, 44, 28, 0.35);
   --code-bg: rgba(139, 111, 71, 0.06);
-  --code-color: #8B6F47;
+  --code-color: #6B5234;
   --ring-avatar: rgba(139, 111, 71, 0.08);
   --shadow-avatar: rgba(93, 64, 55, 0.10);
   --ambient-a: rgba(168, 216, 234, 0.12);
@@ -47,8 +47,8 @@
   --chip-border: rgba(139, 111, 71, 0.10);
   --chip-hover-bg: rgba(139, 111, 71, 0.10);
   --scrollbar-thumb: rgba(139, 111, 71, 0.15);
-  --input-bg: rgba(139, 111, 71, 0.08);
-  --input-focus-bg: rgba(139, 111, 71, 0.12);
+  --input-bg: #efe9e0;
+  --input-focus-bg: #e8e0d4;
   color-scheme: light;
 }
 
@@ -78,8 +78,8 @@
   --chip-border: rgba(196, 149, 106, 0.10);
   --chip-hover-bg: rgba(196, 149, 106, 0.10);
   --scrollbar-thumb: rgba(196, 149, 106, 0.15);
-  --input-bg: rgba(196, 149, 106, 0.14);
-  --input-focus-bg: rgba(196, 149, 106, 0.22);
+  --input-bg: rgba(196, 149, 106, 0.18);
+  --input-focus-bg: rgba(196, 149, 106, 0.26);
   color-scheme: dark;
 }
 
@@ -145,15 +145,16 @@ body {
 
 .sf-input {
   background: var(--input-bg);
-  border: none;
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   color: var(--text-primary);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .sf-input:focus-within,
 .sf-input:focus {
   background: var(--input-focus-bg);
-  box-shadow: 0 0 0 4px rgba(139, 111, 71, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(107, 82, 52, 0.18);
   outline: none;
 }
 .sf-input::placeholder {
