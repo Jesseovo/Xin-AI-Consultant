@@ -152,17 +152,16 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
 
           {isStreaming && messages[messages.length - 1]?.content === "" && (
             <div className="flex items-center gap-3 mb-4">
-              <div
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-xs sm:text-sm font-bold"
-                aria-hidden="true"
-              >
-                软
-              </div>
-              <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
+              <img
+                src="/images/bots/default-bot.png"
+                alt="AI 助手"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover"
+              />
+              <div className="bg-[--bg-card]/80 border border-[--border-subtle] rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
                 <div className="flex gap-1.5">
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+                  <span className="w-2 h-2 bg-[--accent] rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-2 h-2 bg-[--accent] rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-2 h-2 bg-[--accent] rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -180,7 +179,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
                 <button
                   key={q}
                   onClick={() => sendMessage(q)}
-                  className="text-xs px-2.5 py-1 bg-white border border-gray-200 rounded-full text-gray-500 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 transition-colors"
+                  className="text-xs px-2.5 py-1 bg-[--bg-card]/60 border border-[--border-subtle] rounded-full text-[--text-secondary] hover:bg-[--bg-card-hover] hover:border-[--accent]/30 hover:text-[--accent] transition-colors"
                 >
                   {q}
                 </button>
@@ -191,7 +190,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
       )}
 
       <div className="px-3 sm:px-6 py-3">
-        <div className="max-w-3xl mx-auto bg-white rounded-2xl border border-gray-200 shadow-sm p-1.5">
+        <div className="max-w-3xl mx-auto bg-[--bg-card]/60 rounded-2xl border border-[--border-subtle] shadow-sm p-1.5">
           <div className="flex items-end gap-2">
             <textarea
               ref={textareaRef}
@@ -204,7 +203,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
               placeholder="继续提问..."
               rows={1}
               aria-label="输入问题"
-              className="flex-1 resize-none px-3 py-2.5 text-sm bg-transparent focus:outline-none placeholder:text-gray-400"
+              className="flex-1 resize-none px-3 py-2.5 text-sm bg-transparent focus:outline-none placeholder:text-[--text-muted] text-[--text-primary]"
               style={{ maxHeight: "120px" }}
             />
             {isStreaming ? (
@@ -221,7 +220,7 @@ export default function ChatView({ initialQuestion }: ChatViewProps) {
               <button
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim()}
-                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl transition-colors"
+                className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-white rounded-xl transition-colors"
                 aria-label="发送"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

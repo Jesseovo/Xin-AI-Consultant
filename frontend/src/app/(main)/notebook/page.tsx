@@ -9,7 +9,7 @@ export default function NotebookPage() {
         <span className="inline-flex items-center rounded-full border border-[--accent]/30 bg-[--accent]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[--accent]">
           Coming soon
         </span>
-        <div className="w-full h-40 rounded-xl bg-gradient-to-br from-teal-500/20 to-sky-500/20 mb-6 mx-auto max-w-sm mt-6" />
+        <img src="/images/modes/notebook.png" alt="笔记本" className="w-full h-40 rounded-xl object-contain mb-6 mx-auto max-w-sm mt-6" />
         <h1 className="text-[22px] font-semibold text-[--text-primary]">笔记本</h1>
         <p className="text-[14px] text-[--text-secondary] mt-3 leading-relaxed max-w-md mx-auto">
           笔记整理、知识卡片与复习清单即将上线。当前可在对话中随时提问并保存要点。

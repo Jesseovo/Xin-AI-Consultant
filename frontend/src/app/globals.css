@@ -21,65 +21,65 @@
   50% { transform: translateY(-6px); }
 }
 
-/* ===== Light theme (default) ===== */
+/* ===== Light theme (default) — warm tones matching mascot art ===== */
 :root {
-  --bg-primary: #ffffff;
-  --bg-elevated: rgba(242, 242, 247, 0.72);
-  --bg-card: rgba(0, 0, 0, 0.03);
-  --bg-card-hover: rgba(0, 0, 0, 0.06);
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --text-primary: rgba(0, 0, 0, 0.88);
-  --text-secondary: rgba(0, 0, 0, 0.5);
-  --text-muted: rgba(0, 0, 0, 0.28);
-  --accent: #007aff;
-  --accent-secondary: #34c759;
-  --user-bubble: #007aff;
+  --bg-primary: #faf8f5;
+  --bg-elevated: rgba(245, 240, 235, 0.82);
+  --bg-card: rgba(139, 111, 71, 0.04);
+  --bg-card-hover: rgba(139, 111, 71, 0.08);
+  --border-subtle: rgba(139, 111, 71, 0.10);
+  --text-primary: #3e2c1c;
+  --text-secondary: rgba(62, 44, 28, 0.58);
+  --text-muted: rgba(62, 44, 28, 0.32);
+  --accent: #8B6F47;
+  --accent-secondary: #6ba89a;
+  --user-bubble: #8B6F47;
   --user-bubble-text: #ffffff;
-  --user-avatar-bg: rgba(0, 0, 0, 0.04);
-  --user-avatar-text: rgba(0, 0, 0, 0.35);
-  --code-bg: rgba(0, 0, 0, 0.05);
-  --code-color: #ad3da4;
-  --ring-avatar: rgba(0, 0, 0, 0.06);
-  --shadow-avatar: rgba(0, 0, 0, 0.08);
-  --ambient-a: rgba(0, 122, 255, 0.04);
-  --ambient-b: rgba(255, 149, 0, 0.03);
-  --chip-bg: rgba(0, 0, 0, 0.03);
-  --chip-border: rgba(0, 0, 0, 0.06);
-  --chip-hover-bg: rgba(0, 0, 0, 0.06);
-  --scrollbar-thumb: rgba(0, 0, 0, 0.12);
-  --input-bg: rgba(118, 118, 128, 0.12);
-  --input-focus-bg: rgba(118, 118, 128, 0.18);
+  --user-avatar-bg: rgba(139, 111, 71, 0.06);
+  --user-avatar-text: rgba(62, 44, 28, 0.35);
+  --code-bg: rgba(139, 111, 71, 0.06);
+  --code-color: #8B6F47;
+  --ring-avatar: rgba(139, 111, 71, 0.08);
+  --shadow-avatar: rgba(93, 64, 55, 0.10);
+  --ambient-a: rgba(168, 216, 234, 0.12);
+  --ambient-b: rgba(196, 149, 106, 0.08);
+  --chip-bg: rgba(139, 111, 71, 0.05);
+  --chip-border: rgba(139, 111, 71, 0.10);
+  --chip-hover-bg: rgba(139, 111, 71, 0.10);
+  --scrollbar-thumb: rgba(139, 111, 71, 0.15);
+  --input-bg: rgba(139, 111, 71, 0.08);
+  --input-focus-bg: rgba(139, 111, 71, 0.12);
   color-scheme: light;
 }
 
 /* ===== Dark theme ===== */
 .dark {
-  --bg-primary: #000000;
-  --bg-elevated: rgba(28, 28, 30, 0.72);
-  --bg-card: rgba(255, 255, 255, 0.04);
-  --bg-card-hover: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --text-primary: rgba(255, 255, 255, 0.92);
-  --text-secondary: rgba(255, 255, 255, 0.55);
-  --text-muted: rgba(255, 255, 255, 0.3);
-  --accent: #0a84ff;
-  --accent-secondary: #30d158;
-  --user-bubble: #0a84ff;
+  --bg-primary: #1a1410;
+  --bg-elevated: rgba(36, 28, 20, 0.85);
+  --bg-card: rgba(196, 149, 106, 0.06);
+  --bg-card-hover: rgba(196, 149, 106, 0.10);
+  --border-subtle: rgba(196, 149, 106, 0.12);
+  --text-primary: rgba(250, 245, 238, 0.94);
+  --text-secondary: rgba(250, 245, 238, 0.58);
+  --text-muted: rgba(250, 245, 238, 0.32);
+  --accent: #C4956A;
+  --accent-secondary: #7ec4b0;
+  --user-bubble: #C4956A;
   --user-bubble-text: #ffffff;
-  --user-avatar-bg: rgba(255, 255, 255, 0.06);
-  --user-avatar-text: rgba(255, 255, 255, 0.3);
-  --code-bg: rgba(255, 255, 255, 0.08);
-  --code-color: #64d2ff;
-  --ring-avatar: rgba(255, 255, 255, 0.08);
+  --user-avatar-bg: rgba(196, 149, 106, 0.08);
+  --user-avatar-text: rgba(250, 245, 238, 0.3);
+  --code-bg: rgba(196, 149, 106, 0.10);
+  --code-color: #e8c9a0;
+  --ring-avatar: rgba(196, 149, 106, 0.10);
   --shadow-avatar: rgba(0, 0, 0, 0.4);
-  --ambient-a: rgba(10, 132, 255, 0.04);
-  --ambient-b: rgba(255, 159, 10, 0.03);
-  --chip-bg: rgba(255, 255, 255, 0.04);
-  --chip-border: rgba(255, 255, 255, 0.06);
-  --chip-hover-bg: rgba(255, 255, 255, 0.06);
-  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
-  --input-bg: rgba(118, 118, 128, 0.24);
-  --input-focus-bg: rgba(118, 118, 128, 0.36);
+  --ambient-a: rgba(168, 216, 234, 0.06);
+  --ambient-b: rgba(196, 149, 106, 0.05);
+  --chip-bg: rgba(196, 149, 106, 0.06);
+  --chip-border: rgba(196, 149, 106, 0.10);
+  --chip-hover-bg: rgba(196, 149, 106, 0.10);
+  --scrollbar-thumb: rgba(196, 149, 106, 0.15);
+  --input-bg: rgba(196, 149, 106, 0.14);
+  --input-focus-bg: rgba(196, 149, 106, 0.22);
   color-scheme: dark;
 }
 
@@ -153,7 +153,7 @@ body {
 .sf-input:focus-within,
 .sf-input:focus {
   background: var(--input-focus-bg);
-  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12);
+  box-shadow: 0 0 0 4px rgba(139, 111, 71, 0.15);
   outline: none;
 }
 .sf-input::placeholder {

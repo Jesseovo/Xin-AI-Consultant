@@ -99,18 +99,20 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl flex flex-col items-center">
         <div className="mb-8 text-center">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-3xl sm:text-4xl font-bold mx-auto mb-5 shadow-lg shadow-blue-500/20">
-            软
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
+          <img
+            src="/images/platform/logo.png"
+            alt="夹心 Logo"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl mx-auto mb-5 shadow-lg shadow-amber-700/15 object-contain"
+          />
+          <h1 className="text-3xl sm:text-4xl font-bold text-[--text-primary] tracking-tight">
             夹心
           </h1>
-          <p className="mt-2 text-sm sm:text-base text-gray-500">
+          <p className="mt-2 text-sm sm:text-base text-[--text-secondary]">
             夹心 · 智能教学平台
           </p>
         </div>
 
-        <div className="w-full bg-white rounded-2xl border border-gray-200 shadow-sm p-1.5 mb-6">
+        <div className="w-full bg-[--bg-card]/60 rounded-2xl border border-[--border-subtle] shadow-sm p-1.5 mb-6">
           <div className="flex items-end gap-2">
             <textarea
               ref={textareaRef}
@@ -123,14 +125,14 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
               placeholder="有什么想问的？关于专业、课程、考研、就业..."
               rows={1}
               aria-label="输入问题"
-              className="flex-1 resize-none px-3 py-2.5 text-sm sm:text-base bg-transparent focus:outline-none placeholder:text-gray-400"
+              className="flex-1 resize-none px-3 py-2.5 text-sm sm:text-base bg-transparent focus:outline-none placeholder:text-[--text-muted] text-[--text-primary]"
               style={{ maxHeight: "120px" }}
               autoFocus
             />
             <button
               onClick={handleSubmit}
               disabled={!input.trim()}
-              className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-xl transition-colors"
+              className="flex-shrink-0 w-9 h-9 flex items-center justify-center bg-[--accent] hover:opacity-90 disabled:opacity-30 text-white rounded-xl transition-colors"
               aria-label="发送"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,15 +147,15 @@ export default function WelcomeView({ onSend }: WelcomeViewProps) {
             <button
               key={q.question}
               onClick={() => onSend(q.question)}
-              className="group flex flex-col items-start gap-1.5 p-3.5 bg-white border border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50/50 transition-all text-left"
+              className="group flex flex-col items-start gap-1.5 p-3.5 bg-[--bg-card]/60 border border-[--border-subtle] rounded-xl hover:border-[--accent]/30 hover:bg-[--bg-card-hover] transition-all text-left"
             >
-              <span className="text-gray-400 group-hover:text-blue-500 transition-colors">
+              <span className="text-[--text-muted] group-hover:text-[--accent] transition-colors">
                 {q.icon}
               </span>
-              <span className="text-sm font-medium text-gray-800 group-hover:text-blue-700 transition-colors">
+              <span className="text-sm font-medium text-[--text-primary] group-hover:text-[--accent] transition-colors">
                 {q.title}
               </span>
-              <span className="text-xs text-gray-400 leading-snug">{q.desc}</span>
+              <span className="text-xs text-[--text-muted] leading-snug">{q.desc}</span>
             </button>
           ))}
         </div>

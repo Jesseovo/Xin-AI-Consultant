@@ -6,6 +6,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import type { TutorBotSummary } from "@/lib/tutor-types";
 
+const BOT_AVATARS = [
+  "/images/bots/math-bot.png",
+  "/images/bots/code-bot.png",
+  "/images/bots/english-bot.png",
+  "/images/bots/general-bot.png",
+  "/images/bots/default-bot.png",
+];
+
 const MOCK_BOTS: TutorBotSummary[] = [
   {
     id: "b1",
@@ -14,6 +22,7 @@ const MOCK_BOTS: TutorBotSummary[] = [
     subject_tags: ["数学", "高数"],
     teacher_name: "王老师",
     usage_count: 1280,
+    avatar: "/images/bots/math-bot.png",
   },
   {
     id: "b2",
@@ -22,6 +31,7 @@ const MOCK_BOTS: TutorBotSummary[] = [
     subject_tags: ["编程", "数据结构"],
     teacher_name: "李老师",
     usage_count: 956,
+    avatar: "/images/bots/code-bot.png",
   },
   {
     id: "b3",
@@ -30,6 +40,7 @@ const MOCK_BOTS: TutorBotSummary[] = [
     subject_tags: ["英语"],
     teacher_name: "张老师",
     usage_count: 742,
+    avatar: "/images/bots/english-bot.png",
   },
 ];
 
@@ -139,15 +150,15 @@ export default function BotsGalleryPage() {
               key={b.id}
               className="sf-card rounded-2xl p-5 flex flex-col hover:scale-[1.01]"
             >
-              <div
-                className={`w-full h-36 rounded-xl mb-4 bg-gradient-to-br ${
-                  i % 3 === 0
-                    ? "from-blue-500/20 to-purple-500/20"
-                    : i % 3 === 1
-                      ? "from-emerald-500/20 to-cyan-500/20"
-                      : "from-orange-500/20 to-rose-500/20"
-                }`}
-              />
+              <div className="w-full h-36 rounded-xl mb-4 overflow-hidden relative"
+                style={{ background: "linear-gradient(135deg, rgba(168,216,234,0.15), rgba(196,149,106,0.10))" }}
+              >
+                <img
+                  src={b.avatar || BOT_AVATARS[i % BOT_AVATARS.length]}
+                  alt={b.name}
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-28 w-28 object-contain"
+                />
+              </div>
               <h2 className="text-[17px] font-semibold text-[--text-primary]">{b.name}</h2>
               <p className="text-[13px] text-[--text-secondary] mt-1.5 leading-relaxed flex-1">{b.description}</p>
               <div className="flex flex-wrap gap-1.5 mt-3">

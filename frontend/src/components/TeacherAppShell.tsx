@@ -38,17 +38,19 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
   const { user, ready, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
+  const isDemo = user?.id === "demo";
+
   useEffect(() => {
     if (!ready) return;
-    if (!user || user.role !== "teacher") router.replace("/login");
-  }, [ready, user, router]);
+    if (!user || (!isDemo && user.role !== "teacher")) router.replace("/login");
+  }, [ready, user, router, isDemo]);
 
   const handleLogout = useCallback(() => {
     logout();
     router.push("/");
   }, [logout, router]);
 
-  if (!ready || !user || user.role !== "teacher") {
+  if (!ready || !user || (!isDemo && user.role !== "teacher")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[--bg-primary] text-[--text-secondary] text-sm">
         加载中…
@@ -108,7 +110,7 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500/25 to-cyan-500/25 border border-[--border-subtle]" />
+            <img src="/images/student/default-avatar.png" alt="头像" className="w-8 h-8 rounded-full border border-[--border-subtle] object-cover" />
             <div className="hidden sm:block text-right min-w-0">
               <p className="text-[13px] font-medium truncate max-w-[160px]">{user.display_name}</p>
               <p className="text-[11px] text-[--text-muted]">{user.department ?? "教师"}</p>

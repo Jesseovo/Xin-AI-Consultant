@@ -93,10 +93,11 @@ export default function MainAppShell({ children }: { children: ReactNode }) {
         <div className="flex items-center justify-between gap-2 px-3 h-14 border-b border-[--border-subtle]">
           <Link
             href="/"
-            className={`font-semibold tracking-tight text-[--text-primary] truncate ${collapsed ? "lg:hidden" : ""}`}
+            className={`flex items-center gap-2 font-semibold tracking-tight text-[--text-primary] truncate ${collapsed ? "lg:hidden" : ""}`}
             onClick={() => setSidebarOpen(false)}
           >
-            夹心
+            <img src="/images/platform/logo.png" alt="" className="w-7 h-7 object-contain shrink-0" />
+            <span>夹心</span>
           </Link>
           <button
             type="button"
@@ -176,9 +177,10 @@ export default function MainAppShell({ children }: { children: ReactNode }) {
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <div
-              className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-500/30 border border-[--border-subtle] shrink-0"
-              aria-hidden
+            <img
+              src="/images/student/default-avatar.png"
+              alt="头像"
+              className="w-8 h-8 rounded-full border border-[--border-subtle] shrink-0 object-cover"
             />
             <div className="hidden sm:block text-right min-w-0">
               <p className="text-[13px] font-medium text-[--text-primary] truncate max-w-[140px]">

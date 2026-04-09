@@ -84,6 +84,15 @@ function saveStored(data: StoredAuth | null): void {
   }
 }
 
+const DEMO_USER: AuthUser = {
+  id: "demo",
+  username: "demo_admin",
+  display_name: "验收演示",
+  role: "admin",
+  department: "计算机与控制工程学院",
+  major: "软件工程",
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -95,6 +104,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(s.user);
       setAccessToken(s.accessToken);
       api.setToken(s.accessToken);
+    } else {
+      setUser(DEMO_USER);
+      setAccessToken("demo-token");
     }
     setReady(true);
   }, []);

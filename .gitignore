@@ -33,3 +33,6 @@ _qa_*.py
 
 # === Embedding 模型缓存 ===
 .model_cache/
+
+# === 文档（含隐私信息，禁止上传） ===
+docs/

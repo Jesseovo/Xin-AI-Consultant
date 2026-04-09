@@ -10,10 +10,6 @@ export interface BotCardProps {
   onChat: (id: number) => void;
 }
 
-function initialChar(name: string): string {
-  const t = name.trim();
-  return t ? t[0]!.toUpperCase() : "?";
-}
 
 export default function BotCard({
   id,
@@ -27,15 +23,11 @@ export default function BotCard({
   return (
     <article className="sf-card p-5 flex flex-col h-full">
       <div className="flex gap-3 mb-3">
-        <div
-          className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold text-white"
-          style={{
-            background: "linear-gradient(135deg, var(--accent) 0%, #5856d6 100%)",
-          }}
-          aria-hidden
-        >
-          {initialChar(name)}
-        </div>
+        <img
+          src="/images/bots/default-bot.png"
+          alt={name}
+          className="flex-shrink-0 w-12 h-12 rounded-full object-cover"
+        />
         <div className="min-w-0 flex-1">
           <h3 className="text-[15px] font-semibold text-[--text-primary] truncate">{name}</h3>
           {teacherName && (

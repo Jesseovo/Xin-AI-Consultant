@@ -38,17 +38,19 @@ export default function AdminAppShell({ children }: { children: ReactNode }) {
   const { user, ready, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
+  const isDemo = user?.id === "demo";
+
   useEffect(() => {
     if (!ready) return;
-    if (!user || user.role !== "admin") router.replace("/login");
-  }, [ready, user, router]);
+    if (!user || (!isDemo && user.role !== "admin")) router.replace("/login");
+  }, [ready, user, router, isDemo]);
 
   const handleLogout = useCallback(() => {
     logout();
     router.push("/");
   }, [logout, router]);
 
-  if (!ready || !user || user.role !== "admin") {
+  if (!ready || !user || (!isDemo && user.role !== "admin")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[--bg-primary] text-[--text-secondary] text-sm">
         加载中…

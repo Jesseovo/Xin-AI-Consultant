@@ -9,7 +9,7 @@ export default function LearningPage() {
         <span className="inline-flex items-center rounded-full border border-[--accent]/30 bg-[--accent]/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[--accent]">
           Coming soon
         </span>
-        <div className="w-full h-40 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 mb-6 mx-auto max-w-sm mt-6" />
+        <img src="/images/modes/guided.png" alt="学习中心" className="w-full h-40 rounded-xl object-contain mb-6 mx-auto max-w-sm mt-6" />
         <h1 className="text-[22px] font-semibold text-[--text-primary]">学习中心</h1>
         <p className="text-[14px] text-[--text-secondary] mt-3 leading-relaxed max-w-md mx-auto">
           学习路径、进度追踪与任务提醒即将推出。请暂时使用导师机器人与对话功能继续学习。

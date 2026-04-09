@@ -5,6 +5,7 @@ export interface TutorBotSummary {
   subject_tags: string[];
   teacher_name: string;
   usage_count: number;
+  avatar?: string;
 }
 
 export interface ChatSessionSummary {

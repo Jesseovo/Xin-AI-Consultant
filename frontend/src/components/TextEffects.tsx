@@ -102,9 +102,35 @@ export function FadeInSection({
 export function GradientText({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <span
-      className={`bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 ${className ?? ""}`}
+      className={`bg-gradient-to-r from-amber-700 via-yellow-700 to-orange-600 bg-clip-text text-transparent dark:from-amber-400 dark:via-yellow-400 dark:to-orange-400 ${className ?? ""}`}
     >
       {children}
+    </span>
+  );
+}
+
+export function BreathingText({ text, className }: { text: string; className?: string }) {
+  return (
+    <span className={className}>
+      {text.split("").map((char, i) => (
+        <motion.span
+          key={`${char}-${i}`}
+          className="inline-block"
+          style={{ whiteSpace: char === " " ? "pre" : undefined }}
+          animate={{
+            y: [0, -3, 0],
+            opacity: [0.7, 1, 0.7],
+          }}
+          transition={{
+            duration: 2.8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.06,
+          }}
+        >
+          {char}
+        </motion.span>
+      ))}
     </span>
   );
 }
