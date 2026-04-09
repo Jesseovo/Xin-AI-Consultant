@@ -106,28 +106,34 @@ export default function BotsGalleryPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="rounded-2xl overflow-hidden mb-6 relative h-32">
-        <img src="/images/bots/bot-card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="relative z-10 flex items-end h-full px-6 pb-4">
+      <div className="sf-card rounded-2xl overflow-hidden mb-8 relative min-h-[7.5rem]">
+        <img src="/images/bots/bot-card-bg.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-90" />
+        <div className="relative z-10 flex items-end min-h-[7.5rem] px-6 py-5 bg-gradient-to-t from-[--bg-primary]/90 to-transparent">
           <div>
-            <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">导师机器人</h1>
+            <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight drop-shadow-sm">导师机器人</h1>
             <p className="text-[13px] text-[--text-secondary] mt-0.5">选择学科与机器人，开始个性化辅导</p>
           </div>
         </div>
       </div>
 
       {isDemo && (
-        <div className="mb-6 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2 text-sm text-amber-700 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-200">
-          ⚠ 无法连接服务器，当前显示演示数据
+        <div
+          className="mb-6 rounded-2xl bg-amber-50/90 dark:bg-amber-950/35 px-4 py-2.5 text-sm text-[#6b5a3a] dark:text-amber-100/90 shadow-[0_0_0_1px_rgba(217,180,100,0.35)]"
+          role="status"
+        >
+          无法连接服务器，当前显示演示数据
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2 mb-6">
+      <p className="text-[13px] uppercase tracking-[0.2em] text-[--text-muted] mb-3">筛选</p>
+      <div className="flex flex-wrap gap-2 mb-8">
         <button
           type="button"
           onClick={() => setFilter("")}
-          className={`px-3 py-1.5 rounded-full text-[12px] border ${
-            filter === "" ? "bg-[--accent]/15 border-[--accent]/40 text-[--accent]" : "border-[--chip-border] bg-[--chip-bg] text-[--text-secondary]"
+          className={`rounded-full px-3.5 py-1.5 text-[12px] font-medium transition-all ${
+            filter === ""
+              ? "bg-[--accent]/12 text-[--accent] shadow-[0_0_0_1px_rgba(201,100,66,0.35)]"
+              : "bg-[--chip-bg] text-[--text-secondary] shadow-[0_0_0_1px_var(--chip-border)] hover:bg-[--chip-hover-bg]"
           }`}
         >
           全部
@@ -137,8 +143,10 @@ export default function BotsGalleryPage() {
             key={t}
             type="button"
             onClick={() => setFilter(t)}
-            className={`px-3 py-1.5 rounded-full text-[12px] border ${
-              filter === t ? "bg-[--accent]/15 border-[--accent]/40 text-[--accent]" : "border-[--chip-border] bg-[--chip-bg] text-[--text-secondary]"
+            className={`rounded-full px-3.5 py-1.5 text-[12px] font-medium transition-all ${
+              filter === t
+                ? "bg-[--accent]/12 text-[--accent] shadow-[0_0_0_1px_rgba(201,100,66,0.35)]"
+                : "bg-[--chip-bg] text-[--text-secondary] shadow-[0_0_0_1px_var(--chip-border)] hover:bg-[--chip-hover-bg]"
             }`}
           >
             {t}
@@ -147,31 +155,46 @@ export default function BotsGalleryPage() {
       </div>
 
       {loading ? (
-        <p className="text-[14px] text-[--text-muted]">加载中…</p>
+        <div className="grid sm:grid-cols-2 gap-4 animate-pulse" aria-busy="true">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="sf-card rounded-2xl p-5 flex flex-col">
+              <div className="w-full h-36 rounded-2xl mb-4 sf-skeleton" />
+              <div className="sf-skeleton h-4 w-2/3 mb-3" />
+              <div className="sf-skeleton h-3 w-full mb-2" />
+              <div className="sf-skeleton h-3 w-4/5 mb-3" />
+              <div className="flex flex-wrap gap-2 mt-1">
+                <div className="sf-skeleton h-5 w-12 rounded-full" />
+                <div className="sf-skeleton h-5 w-14 rounded-full" />
+              </div>
+              <div className="sf-skeleton h-3 w-1/2 mt-3" />
+              <div className="sf-skeleton h-10 w-full rounded-full mt-4" />
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {filtered.map((b, i) => (
             <article
               key={b.id}
-              className="sf-card rounded-2xl p-5 flex flex-col hover:scale-[1.01]"
+              className="sf-card rounded-2xl p-5 flex flex-col"
             >
-              <div className="w-full h-36 rounded-xl mb-4 overflow-hidden relative"
-                style={{ background: "linear-gradient(135deg, rgba(168,216,234,0.15), rgba(196,149,106,0.10))" }}
+              <div
+                className="w-full h-36 rounded-2xl mb-4 overflow-hidden relative"
+                style={{ background: "linear-gradient(135deg, rgba(201,100,66,0.08), rgba(107,168,154,0.1))" }}
               >
-                <img
-                  src={b.avatar || BOT_AVATARS[i % BOT_AVATARS.length]}
-                  alt={b.name}
-                  className="absolute bottom-0 left-1/2 -translate-x-1/2 h-28 w-28 object-contain"
-                />
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-[color-mix(in_srgb,var(--bg-primary)_70%,transparent)] shadow-[0_0_0_1px_rgba(208,205,195,0.35),0_8px_24px_rgba(0,0,0,0.06)] flex items-center justify-center">
+                  <img
+                    src={b.avatar || BOT_AVATARS[i % BOT_AVATARS.length]}
+                    alt={b.name}
+                    className="h-24 w-24 object-contain"
+                  />
+                </div>
               </div>
-              <h2 className="text-[17px] font-semibold text-[--text-primary]">{b.name}</h2>
+              <h2 className="text-[17px] font-semibold text-[--text-primary] tracking-tight">{b.name}</h2>
               <p className="text-[13px] text-[--text-secondary] mt-1.5 leading-relaxed flex-1">{b.description}</p>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {b.subject_tags.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[11px] px-2 py-0.5 rounded-md bg-[--chip-bg] border border-[--chip-border] text-[--text-secondary]"
-                  >
+                  <span key={t} className="sf-badge text-[11px] py-0.5 px-2.5">
                     {t}
                   </span>
                 ))}
@@ -182,7 +205,7 @@ export default function BotsGalleryPage() {
               <button
                 type="button"
                 onClick={() => void startChat(b.id)}
-                className="mt-4 w-full py-2.5 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium"
+                className="sf-btn-primary mt-4 w-full rounded-full py-2.5 text-[14px]"
               >
                 开始对话
               </button>
@@ -192,11 +215,13 @@ export default function BotsGalleryPage() {
       )}
 
       {filtered.length === 0 && !loading && (
-        <p className="text-[14px] text-[--text-muted] text-center py-12">该标签下暂无机器人</p>
+        <div className="sf-card rounded-2xl p-12 text-center">
+          <p className="text-[15px] text-[--text-secondary]">该标签下暂无机器人</p>
+        </div>
       )}
 
       <p className="mt-8 text-center text-[13px] text-[--text-muted]">
-        <Link href="/chat" className="text-[--accent] hover:underline">
+        <Link href="/chat" className="text-[--accent] font-medium hover:underline underline-offset-2">
           查看我的对话
         </Link>
       </p>

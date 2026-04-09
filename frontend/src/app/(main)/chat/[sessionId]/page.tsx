@@ -31,6 +31,13 @@ function genId() {
   return `c${Date.now().toString(36)}${(++_mid).toString(36)}`;
 }
 
+const QUICK_PROMPTS = [
+  "帮我解释一个概念",
+  "出一道练习题来测试我",
+  "帮我总结一下这个知识点",
+  "我做错了这道题，帮我分析原因",
+];
+
 export default function ChatSessionPage() {
   const params = useParams();
   const sessionId = typeof params.sessionId === "string" ? params.sessionId : "";
@@ -40,6 +47,7 @@ export default function ChatSessionPage() {
   const [streaming, setStreaming] = useState(false);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [historyError, setHistoryError] = useState<string | null>(null);
+  const [sessionTitle, setSessionTitle] = useState<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const streamAccRef = useRef("");
@@ -51,7 +59,8 @@ export default function ChatSessionPage() {
     setHistoryLoading(true);
     setHistoryError(null);
     try {
-      const res = await api.get<{ messages?: ChatMessage[] }>(`/chat/sessions/${sessionId}/messages`);
+      const res = await api.get<{ messages?: ChatMessage[]; title?: string }>(`/chat/sessions/${sessionId}/messages`);
+      if (res.title) setSessionTitle(res.title);
       const list = res.messages;
       if (Array.isArray(list) && list.length > 0) {
         setMessages(
@@ -165,11 +174,16 @@ export default function ChatSessionPage() {
 
   return (
     <div className="flex flex-col h-[calc(100dvh-3.5rem)] max-w-3xl mx-auto w-full">
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[--border-subtle] shrink-0">
-        <Link href="/chat" className="text-[13px] text-[--accent] hover:underline shrink-0">
+      <div className="flex items-center justify-between gap-3 px-4 py-3 shrink-0 bg-[--bg-primary]/95 backdrop-blur-md shadow-[0_1px_0_0_var(--border-subtle)]">
+        <h2 className="text-[15px] font-semibold text-[--text-primary] truncate min-w-0 tracking-tight">
+          {sessionTitle || new Date().toLocaleDateString("zh-CN", { month: "long", day: "numeric" }) + "的对话"}
+        </h2>
+        <Link
+          href="/chat"
+          className="sf-btn-ghost shrink-0 text-[13px] text-[--accent] rounded-full px-3 py-1.5 hover:bg-[--bg-card]"
+        >
           返回列表
         </Link>
-        <span className="text-[13px] text-[--text-muted] truncate">会话 {sessionId}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
@@ -178,15 +192,16 @@ export default function ChatSessionPage() {
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className={`flex mb-4 ${i % 2 === 0 ? "justify-end" : "justify-start"}`}
+                className={`flex mb-4 gap-2 items-end ${i % 2 === 0 ? "justify-end flex-row-reverse" : "justify-start"}`}
               >
+                <div className="h-8 w-8 shrink-0 rounded-full sf-skeleton shadow-[0_0_0_1px_rgba(208,205,195,0.25)]" />
                 <div
-                  className="sf-card max-w-[75%] rounded-2xl px-4 py-3 space-y-2"
-                  style={i % 2 === 0 ? { background: "var(--user-bubble)" } : undefined}
+                  className="max-w-[75%] rounded-2xl px-4 py-3 space-y-2 shadow-[0_0_0_1px_rgba(208,205,195,0.18),0_4px_16px_rgba(0,0,0,0.04)]"
+                  style={i % 2 === 0 ? { background: "var(--user-bubble)" } : { background: "var(--bg-card)" }}
                 >
-                  <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,200px)]" />
-                  <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,160px)]" />
-                  {i % 2 === 1 && <div className="h-3 rounded bg-[--bg-card-hover] w-[min(100%,120px)]" />}
+                  <div className="sf-skeleton h-3 w-[min(100%,200px)]" />
+                  <div className="sf-skeleton h-3 w-[min(100%,160px)]" />
+                  {i % 2 === 1 && <div className="sf-skeleton h-3 w-[min(100%,120px)]" />}
                 </div>
               </div>
             ))}
@@ -195,14 +210,14 @@ export default function ChatSessionPage() {
 
         {historyError && (
           <div
-            className="mb-4 rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-[13px] text-red-700 dark:text-red-300"
+            className="mb-4 rounded-2xl bg-red-500/10 px-4 py-3 text-[13px] text-red-800 shadow-[0_0_0_1px_rgba(239,68,68,0.25),0_4px_16px_rgba(239,68,68,0.08)] dark:text-red-200"
             role="alert"
           >
             <p>{historyError}</p>
             <button
               type="button"
               onClick={() => void loadHistory()}
-              className="mt-2 px-3 py-1.5 rounded-lg bg-[--accent] text-[--accent-text] text-[12px] font-medium"
+              className="sf-btn-primary mt-2 px-4 py-1.5 text-[12px] font-medium rounded-full"
             >
               重试加载
             </button>
@@ -210,12 +225,28 @@ export default function ChatSessionPage() {
         )}
 
         {!historyLoading && !historyError && messages.length === 0 && (
-          <p className="text-[14px] text-[--text-secondary] text-center py-12">输入问题开始对话</p>
+          <div className="flex flex-col items-center justify-center py-12 px-4">
+            <img src="/images/platform/logo.png" alt="" className="w-16 h-16 object-contain mb-4 opacity-60" />
+            <p className="text-[17px] font-semibold text-[--text-primary] tracking-tight mb-1">开始新对话</p>
+            <p className="text-[13px] text-[--text-secondary] mb-8">试试下面的问题，或直接输入你想问的</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-lg">
+              {QUICK_PROMPTS.map((q) => (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => { setInput(q); }}
+                  className="sf-btn-ghost text-left px-4 py-3 rounded-2xl text-[14px] text-[--text-secondary] hover:text-[--text-primary] shadow-[0_0_0_1px_var(--border-subtle)] hover:shadow-[0_0_0_1px_var(--ring-warm),0_4px_12px_rgba(0,0,0,0.04)] transition-all duration-200"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
         )}
         {messages.map((msg) => (
           <div key={msg.id}>
             {msg.role === "assistant" && msg.sources && msg.sources.length > 0 && !msg.streaming && (
-              <div className="mb-2 ml-10 sf-card rounded-xl p-3 text-[12px] text-[--text-secondary]">
+              <div className="mb-2 ml-10 sf-card rounded-[20px] p-3 text-[12px] text-[--text-secondary]">
                 <p className="font-medium text-[--text-primary] mb-1.5">参考来源</p>
                 <ul className="space-y-1.5">
                   {msg.sources.map((s, i) => (
@@ -243,18 +274,19 @@ export default function ChatSessionPage() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="shrink-0 border-t border-[--border-subtle] px-4 py-3 bg-[--bg-primary]/90 backdrop-blur-md">
+      <div className="shrink-0 px-4 py-3 bg-[--bg-primary]/90 backdrop-blur-md shadow-[0_-1px_0_0_var(--border-subtle)]">
         <div className="flex flex-wrap gap-1.5 mb-2">
           {MODES.map((m) => (
             <button
               key={m.id}
               type="button"
               onClick={() => setMode(m.id)}
-              className={`px-3 py-1 rounded-full text-[12px] border transition-colors ${
+              aria-pressed={mode === m.id}
+              className={
                 mode === m.id
-                  ? "bg-[--accent]/15 border-[--accent]/40 text-[--accent]"
-                  : "border-[--chip-border] bg-[--chip-bg] text-[--text-secondary]"
-              }`}
+                  ? "sf-badge bg-[--accent] text-[--accent-text] shadow-[0_0_0_1px_var(--accent)] hover:bg-[--accent-hover]"
+                  : "sf-badge hover:bg-[--chip-hover-bg]"
+              }
             >
               {m.label}
             </button>
@@ -282,7 +314,7 @@ export default function ChatSessionPage() {
             type="button"
             onClick={() => void send()}
             disabled={!input.trim() || streaming}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-[--accent] text-[--accent-text] disabled:opacity-30 shrink-0"
+            className="sf-btn-primary w-10 h-10 flex items-center justify-center rounded-full p-0 disabled:opacity-30 shrink-0"
             aria-label="发送"
           >
             <IconSend className="w-5 h-5" />

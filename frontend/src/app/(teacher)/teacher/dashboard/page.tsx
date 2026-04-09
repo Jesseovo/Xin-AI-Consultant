@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import StatsCard from "@/components/StatsCard";
 import { api } from "@/lib/api";
 
 interface DashboardStats {
@@ -54,43 +55,56 @@ export default function TeacherDashboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="rounded-2xl overflow-hidden mb-8">
-        <img src="/images/teacher/dashboard-header.png" alt="" className="w-full h-36 object-cover" />
+      <div className="rounded-[20px] overflow-hidden mb-8 sf-glow">
+        <img src="/images/teacher/dashboard-header.png" alt="" className="w-full h-36 sm:h-40 object-cover" />
       </div>
-      <h1 className="text-[22px] font-semibold text-[--text-primary]">工作台</h1>
+      <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">工作台</h1>
       <p className="text-[13px] text-[--text-secondary] mt-0.5 mb-8">总览您的教学内容与使用数据</p>
 
       <div className="grid sm:grid-cols-3 gap-4 mb-10">
-        {cards.map((c) => (
-          <div key={c.label} className="sf-card rounded-2xl p-5">
-            <p className="text-[12px] text-[--text-muted] uppercase tracking-wide">{c.label}</p>
-            <p className="text-[28px] font-semibold text-[--text-primary] mt-1">{loading ? "…" : c.value}</p>
-          </div>
-        ))}
+        {loading
+          ? cards.map((c) => (
+              <div key={c.label} className="sf-card p-5">
+                <div className="sf-skeleton h-3 w-16 mb-3 rounded-md" />
+                <div className="sf-skeleton h-9 w-12 rounded-md" />
+              </div>
+            ))
+          : cards.map((c) => <StatsCard key={c.label} label={c.label} value={c.value} />)}
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4 mb-10">
-        <Link href="/teacher/bots" className="sf-card rounded-2xl overflow-hidden block no-underline hover:scale-[1.02]">
+        <Link
+          href="/teacher/bots"
+          className="sf-card rounded-[20px] overflow-hidden block no-underline transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(201,100,66,0.22),0_12px_40px_-8px_rgba(201,100,66,0.12)]"
+        >
           <img src="/images/teacher/create-bot-guide.png" alt="" className="w-full h-28 object-cover" />
           <div className="p-4 text-center">
-            <p className="text-[15px] font-medium text-[--accent]">创建机器人</p>
+            <p className="text-[15px] font-medium text-[--accent] tracking-tight">创建机器人</p>
             <p className="text-[12px] text-[--text-muted] mt-1">配置导师人格与知识范围</p>
           </div>
         </Link>
-        <Link href="/teacher/knowledge" className="sf-card rounded-2xl overflow-hidden block no-underline hover:scale-[1.02]">
+        <Link
+          href="/teacher/knowledge"
+          className="sf-card rounded-[20px] overflow-hidden block no-underline transition-all duration-300 hover:shadow-[0_0_0_1px_rgba(201,100,66,0.22),0_12px_40px_-8px_rgba(201,100,66,0.12)]"
+        >
           <img src="/images/teacher/upload-guide.png" alt="" className="w-full h-28 object-cover" />
           <div className="p-4 text-center">
-            <p className="text-[15px] font-medium text-[--accent]">上传知识</p>
+            <p className="text-[15px] font-medium text-[--accent] tracking-tight">上传知识</p>
             <p className="text-[12px] text-[--text-muted] mt-1">文档解析与向量化</p>
           </div>
         </Link>
       </div>
 
-      <div className="sf-glass rounded-2xl p-6">
-        <h2 className="text-[15px] font-semibold text-[--text-primary] mb-4">最近动态</h2>
-        <ul className="space-y-3">
-          {activity.map((a) => (
-            <li key={a.id} className="flex justify-between gap-4 text-[13px] border-b border-[--border-subtle] pb-3 last:border-0 last:pb-0">
+      <div className="sf-glass rounded-[20px] p-6">
+        <h2 className="text-[15px] font-semibold text-[--text-primary] mb-4 tracking-tight">最近动态</h2>
+        <ul className="space-y-0">
+          {activity.map((a, i) => (
+            <li
+              key={a.id}
+              className={`flex justify-between gap-4 text-[13px] py-3 ${
+                i < activity.length - 1 ? "shadow-[0_1px_0_0_rgba(208,205,195,0.35)]" : ""
+              }`}
+            >
               <span className="text-[--text-primary]">{a.text}</span>
               <span className="text-[--text-muted] shrink-0">{a.time}</span>
             </li>

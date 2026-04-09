@@ -21,7 +21,7 @@ function ThemeToggleBtn() {
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "浅色" : "深色"}
-      className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[--bg-card-hover]"
+      className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[--bg-card-hover] transition-colors"
     >
       {theme === "dark" ? (
         <IconSun className="w-[18px] h-[18px] text-[--text-secondary]" />
@@ -52,8 +52,11 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
 
   if (!ready || !user || (!isDemo && user.role !== "teacher")) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[--bg-primary] text-[--text-secondary] text-sm">
-        加载中…
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[--bg-primary]">
+        <div className="flex flex-col items-center gap-4">
+          <img src="/images/platform/logo.png" alt="" className="w-12 h-12 object-contain animate-pulse opacity-60" />
+          <div className="sf-skeleton h-3 w-24 rounded-full" />
+        </div>
       </div>
     );
   }
@@ -65,16 +68,16 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
       )}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50 w-[240px] shrink-0 border-r border-[--border-subtle] bg-[--bg-elevated] backdrop-blur-xl
+          sf-glass fixed lg:static inset-y-0 left-0 z-50 w-[240px] shrink-0
           flex flex-col transition-transform duration-300
           ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
-        <div className="flex items-center justify-between h-14 px-3 border-b border-[--border-subtle]">
-          <Link href="/teacher/dashboard" className="font-semibold text-[--text-primary]" onClick={() => setOpen(false)}>
+        <div className="flex items-center justify-between h-14 px-3 shadow-[inset_0_-1px_0_0_rgba(208,205,195,0.22)]">
+          <Link href="/teacher/dashboard" className="font-semibold tracking-tight text-[--text-primary]" onClick={() => setOpen(false)}>
             教师工作台
           </Link>
-          <button type="button" className="lg:hidden p-2 rounded-lg hover:bg-[--bg-card-hover]" onClick={() => setOpen(false)} aria-label="关闭">
+          <button type="button" className="lg:hidden p-2 rounded-xl hover:bg-[--bg-card-hover] transition-colors" onClick={() => setOpen(false)} aria-label="关闭">
             <IconX className="w-5 h-5 text-[--text-secondary]" />
           </button>
         </div>
@@ -86,8 +89,10 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[14px] ${
-                  active ? "bg-[--accent]/15 text-[--accent]" : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
+                className={`flex items-center gap-3 rounded-[14px] px-3 py-2.5 text-[14px] transition-all duration-200 ${
+                  active
+                    ? "bg-[--accent]/12 text-[--accent] shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_28%,transparent),0_0_24px_-4px_var(--accent-glow)]"
+                    : "text-[--text-secondary] hover:bg-[--bg-card-hover]"
                 }`}
               >
                 <Icon className="w-5 h-5 shrink-0" />
@@ -96,27 +101,31 @@ export default function TeacherAppShell({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
-        <div className="p-3 border-t border-[--border-subtle]">
-          <Link href="/chat" className="block text-[13px] text-[--accent] text-center py-2" onClick={() => setOpen(false)}>
+        <div className="p-3 shadow-[inset_0_1px_0_0_rgba(208,205,195,0.22)]">
+          <Link href="/chat" className="block text-[13px] text-[--accent] text-center py-2 rounded-xl hover:bg-[--bg-card-hover] transition-colors" onClick={() => setOpen(false)}>
             返回学习端
           </Link>
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <header className="sticky top-0 z-30 flex items-center gap-3 h-14 px-4 border-b border-[--border-subtle] bg-[--bg-primary]/85 backdrop-blur-md">
-          <button type="button" className="lg:hidden p-2 rounded-lg hover:bg-[--bg-card-hover]" onClick={() => setOpen(true)} aria-label="菜单">
+        <header className="sf-glass sticky top-0 z-30 flex items-center gap-3 h-14 px-4 backdrop-blur-xl">
+          <button type="button" className="lg:hidden p-2 rounded-xl hover:bg-[--bg-card-hover] transition-colors" onClick={() => setOpen(true)} aria-label="菜单">
             <IconMenu className="w-5 h-5 text-[--text-secondary]" />
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
-            <img src="/images/student/default-avatar.png" alt="头像" className="w-8 h-8 rounded-full border border-[--border-subtle] object-cover" />
+            <img
+              src="/images/student/default-avatar.png"
+              alt="头像"
+              className="w-8 h-8 rounded-full object-cover shadow-[0_0_0_1px_var(--border-subtle),0_4px_12px_var(--shadow-avatar)]"
+            />
             <div className="hidden sm:block text-right min-w-0">
-              <p className="text-[13px] font-medium truncate max-w-[160px]">{user.display_name}</p>
+              <p className="text-[13px] font-medium truncate max-w-[160px] tracking-tight">{user.display_name}</p>
               <p className="text-[11px] text-[--text-muted]">{user.department ?? "教师"}</p>
             </div>
             <ThemeToggleBtn />
-            <button type="button" onClick={handleLogout} className="p-2 rounded-full hover:bg-[--bg-card-hover] text-[--text-secondary]" aria-label="退出">
+            <button type="button" onClick={handleLogout} className="p-2 rounded-full hover:bg-[--bg-card-hover] text-[--text-secondary] transition-colors" aria-label="退出">
               <IconLogOut className="w-[18px] h-[18px]" />
             </button>
           </div>

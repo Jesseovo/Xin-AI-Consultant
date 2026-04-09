@@ -65,13 +65,15 @@ export default function TeacherBotsPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-[22px] font-semibold text-[--text-primary]">我的机器人</h1>
+      <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">我的机器人</h1>
       <p className="text-[13px] text-[--text-secondary] mt-0.5 mb-6">创建与管理 TutorBot</p>
 
-      {msg && <div className="mb-4 text-[13px] sf-card px-3 py-2 rounded-xl text-[--text-secondary]">{msg}</div>}
+      {msg && (
+        <div className="mb-4 text-[13px] sf-card px-4 py-3 rounded-[20px] text-[--text-secondary]">{msg}</div>
+      )}
 
-      <form onSubmit={createBot} className="sf-glass rounded-2xl p-6 mb-10 space-y-4">
-        <h2 className="text-[15px] font-semibold text-[--text-primary]">新建机器人</h2>
+      <form onSubmit={createBot} className="sf-glass rounded-[20px] p-6 mb-10 space-y-4">
+        <h2 className="text-[15px] font-semibold text-[--text-primary] tracking-tight">新建机器人</h2>
         <div>
           <label className="text-[12px] text-[--text-secondary]">名称</label>
           <input className="sf-input w-full mt-1 px-4 py-3 text-[15px]" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -103,15 +105,15 @@ export default function TeacherBotsPage() {
             placeholder="数学, 高数"
           />
         </div>
-        <button type="submit" className="w-full py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium">
+        <button type="submit" className="sf-btn-primary w-full py-3 rounded-[14px] text-[14px] font-medium">
           创建
         </button>
       </form>
 
       <ul className="space-y-3">
         {bots.map((b) => (
-          <li key={b.id} className="sf-card rounded-2xl p-4">
-            <p className="text-[16px] font-medium text-[--text-primary]">{b.name}</p>
+          <li key={b.id} className="sf-card p-4 rounded-[20px]">
+            <p className="text-[16px] font-medium text-[--text-primary] tracking-tight">{b.name}</p>
             <p className="text-[13px] text-[--text-secondary] mt-1">{b.description}</p>
             <p className="text-[12px] text-[--text-muted] mt-2">
               {b.subject_tags.join(" · ")} · 使用 {b.usage_count} 次

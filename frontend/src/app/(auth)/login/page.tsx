@@ -16,7 +16,7 @@ function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={theme === "dark" ? "切换到浅色" : "切换到深色"}
-      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[--bg-card-hover]"
+      className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[--bg-card-hover] shadow-[0_0_0_1px_var(--border-subtle)]"
     >
       {theme === "dark" ? (
         <IconSun className="w-[18px] h-[18px] text-[--text-secondary]" />
@@ -92,113 +92,146 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex bg-[--bg-primary]">
-      {/* Left illustration */}
-      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+      {/* Left: full-bleed hero image */}
+      <div className="hidden lg:block lg:w-1/2 min-h-screen relative overflow-hidden">
         <img
           src="/images/platform/login-bg.png"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(245, 244, 237, 0.82) 0%, rgba(201, 100, 66, 0.12) 42%, rgba(94, 93, 89, 0.35) 100%)",
+          }}
+        />
+        <div className="absolute inset-0 sf-glow opacity-80 mix-blend-soft-light pointer-events-none" aria-hidden />
       </div>
 
-      {/* Right form */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 relative">
-        <div className="absolute top-4 right-4 z-10">
+      {/* Right: form */}
+      <div className="flex-1 flex flex-col items-center justify-center px-5 py-10 sm:py-14 lg:px-10 relative min-h-screen">
+        <div className="absolute top-5 right-5 z-10">
           <ThemeToggle />
         </div>
 
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="text-center mb-6">
-            <Link href="/" className="inline-block">
-              <img src="/images/platform/logo.png" alt="夹心" className="w-14 h-14 mx-auto mb-2 object-contain" />
+          <div className="text-center mb-10 sm:mb-12">
+            <Link
+              href="/"
+              className="inline-flex flex-col items-center transition-transform duration-300 hover:scale-[1.02]"
+            >
+              <span className="inline-flex items-center justify-center rounded-[1.25rem] sf-glow p-2 mb-4">
+                <img
+                  src="/images/platform/logo.png"
+                  alt="夹心"
+                  className="w-[4.5rem] h-[4.5rem] object-contain"
+                />
+              </span>
             </Link>
-            <h1 className="text-[20px] font-semibold text-[--text-primary]">夹心</h1>
-            <p className="text-[13px] text-[--text-secondary]">智能教学平台</p>
+            <h1 className="text-[22px] font-semibold tracking-tight text-[--text-primary]">夹心</h1>
+            <p className="text-[13px] text-[--text-secondary] mt-2">智能教学平台</p>
           </div>
 
-          {/* Tab bar */}
-          <div className="flex rounded-xl overflow-hidden border border-[--border-subtle] mb-5">
+          {/* Tab switcher — pills */}
+          <div
+            className="flex p-1 rounded-full mb-8 shadow-[inset_0_1px_3px_rgba(20,20,19,0.06)]"
+            style={{ background: "var(--input-bg)" }}
+            role="tablist"
+          >
             <button
               type="button"
-              onClick={() => { setTab("login"); setError(null); }}
-              className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
-                tab === "login"
-                  ? "bg-[--accent] text-[--accent-text]"
-                  : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
+              role="tab"
+              aria-selected={tab === "login"}
+              onClick={() => {
+                setTab("login");
+                setError(null);
+              }}
+              className={`flex-1 py-2.5 rounded-full text-[14px] font-medium transition-all duration-300 ${
+                tab === "login" ? "sf-btn-primary" : "sf-btn-ghost"
               }`}
             >
               登录
             </button>
             <button
               type="button"
-              onClick={() => { setTab("register"); setError(null); }}
-              className={`flex-1 py-2.5 text-[14px] font-medium transition-colors ${
-                tab === "register"
-                  ? "bg-[--accent] text-[--accent-text]"
-                  : "bg-[--input-bg] text-[--text-secondary] hover:text-[--text-primary]"
+              role="tab"
+              aria-selected={tab === "register"}
+              onClick={() => {
+                setTab("register");
+                setError(null);
+              }}
+              className={`flex-1 py-2.5 rounded-full text-[14px] font-medium transition-all duration-300 ${
+                tab === "register" ? "sf-btn-primary" : "sf-btn-ghost"
               }`}
             >
               注册
             </button>
           </div>
 
-          {/* Unified form card */}
           <form
             onSubmit={isRegister ? submitRegister : submitLogin}
-            className="rounded-2xl border border-[--border-subtle] bg-white/60 dark:bg-white/5 p-6 space-y-3.5"
+            className="sf-glass rounded-[20px] p-7 sm:p-8 space-y-5 sm:space-y-6 shadow-[0_24px_64px_-20px_rgba(20,20,19,0.12),0_8px_32px_-12px_rgba(201,100,66,0.08)]"
           >
             {error && (
-              <div className="px-3 py-2 rounded-lg text-[13px] text-red-700 dark:text-red-300 bg-red-500/10 border border-red-500/20">
+              <div className="px-4 py-3 rounded-xl text-[13px] text-red-700 dark:text-red-300 bg-red-500/10 shadow-[inset_0_0_0_1px_rgba(239,68,68,0.12)]">
                 {error}
               </div>
             )}
 
-            {/* Username — always visible */}
-            <div>
-              <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">用户名</label>
-              <input
-                className="sf-input w-full px-3.5 py-2.5 text-[14px]"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                autoComplete="username"
-                placeholder="请输入用户名"
-                required
-              />
+            <div className="space-y-5">
+              <div>
+                <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                  用户名
+                </label>
+                <input
+                  className="sf-input w-full px-4 py-3.5 text-[14px]"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  placeholder="请输入用户名"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                  密码
+                </label>
+                <input
+                  type="password"
+                  className="sf-input w-full px-4 py-3.5 text-[14px]"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete={isRegister ? "new-password" : "current-password"}
+                  placeholder="请输入密码"
+                  required
+                />
+              </div>
             </div>
 
-            {/* Password — always visible */}
-            <div>
-              <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">密码</label>
-              <input
-                type="password"
-                className="sf-input w-full px-3.5 py-2.5 text-[14px]"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete={isRegister ? "new-password" : "current-password"}
-                placeholder="请输入密码"
-                required
-              />
-            </div>
-
-            {/* Register-only fields */}
             {isRegister && (
-              <>
+              <div className="space-y-5 pt-1">
                 <div>
-                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">显示名称</label>
+                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                    显示名称
+                  </label>
                   <input
-                    className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                    className="sf-input w-full px-4 py-3.5 text-[14px]"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="你的昵称"
                     required
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">角色</label>
+                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                      角色
+                    </label>
                     <select
-                      className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                      className="sf-input w-full px-4 py-3.5 text-[14px]"
                       value={role}
                       onChange={(e) => setRole(e.target.value as "student" | "teacher")}
                     >
@@ -207,9 +240,11 @@ export default function LoginPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">院系</label>
+                    <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                      院系
+                    </label>
                     <input
-                      className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                      className="sf-input w-full px-4 py-3.5 text-[14px]"
                       value={department}
                       onChange={(e) => setDepartment(e.target.value)}
                       placeholder="计算机学院"
@@ -218,29 +253,32 @@ export default function LoginPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-1">专业</label>
+                  <label className="block text-[12px] font-medium text-[--text-secondary] mb-2 tracking-tight">
+                    专业
+                  </label>
                   <input
-                    className="sf-input w-full px-3.5 py-2.5 text-[14px]"
+                    className="sf-input w-full px-4 py-3.5 text-[14px]"
                     value={major}
                     onChange={(e) => setMajor(e.target.value)}
                     placeholder="软件工程"
                     required
                   />
                 </div>
-              </>
+              </div>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[15px] font-medium disabled:opacity-50 transition-opacity"
+              className="sf-btn-primary w-full py-3.5 text-[15px] mt-2 rounded-full"
             >
               {loading ? "处理中…" : isRegister ? "注册" : "登录"}
             </button>
 
-            <p className="text-center text-[12px] text-[--text-muted] pt-1">
-              <Link href="/" className="text-[--accent] hover:underline">返回首页</Link>
+            <p className="text-center text-[12px] text-[--text-muted] pt-2">
+              <Link href="/" className="text-[--accent] hover:underline">
+                返回首页
+              </Link>
             </p>
           </form>
         </div>

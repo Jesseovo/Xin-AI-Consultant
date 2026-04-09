@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import StatsCard from "@/components/StatsCard";
 import { api } from "@/lib/api";
 
 interface AdminOverview {
@@ -50,11 +51,17 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-[22px] font-semibold text-[--text-primary]">管理总览</h1>
+      <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">管理总览</h1>
       <p className="text-[13px] text-[--text-secondary] mt-0.5 mb-8">系统健康与模型配置</p>
 
-      <div className="sf-card rounded-2xl p-6 mb-6">
-        <h2 className="text-[14px] font-semibold text-[--text-primary] mb-2">服务状态</h2>
+      <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
+        <StatsCard label="学生" value={ur?.student ?? "—"} />
+        <StatsCard label="教师" value={ur?.teacher ?? "—"} />
+        <StatsCard label="管理员" value={ur?.admin ?? "—"} />
+      </div>
+
+      <div className="sf-card rounded-[20px] p-6 mb-6">
+        <h2 className="text-[14px] font-semibold text-[--text-primary] mb-2 tracking-tight">服务状态</h2>
         <p className="text-[13px] text-[--text-secondary]">
           {h?.ok !== false ? (
             <span className="text-[--accent-secondary]">● 正常</span>
@@ -65,8 +72,8 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="sf-card rounded-2xl p-6 mb-6">
-        <h2 className="text-[14px] font-semibold text-[--text-primary] mb-2">大模型</h2>
+      <div className="sf-card rounded-[20px] p-6 mb-6">
+        <h2 className="text-[14px] font-semibold text-[--text-primary] mb-2 tracking-tight">大模型</h2>
         <p className="text-[13px] text-[--text-secondary]">
           提供商：{llm?.provider ?? "—"}
           <br />
@@ -76,29 +83,11 @@ export default function AdminDashboardPage() {
           type="button"
           onClick={() => void testConnection()}
           disabled={testing}
-          className="mt-4 px-4 py-2 rounded-xl bg-[--accent] text-[--accent-text] text-[13px] disabled:opacity-50"
+          className="sf-btn-primary mt-4 px-4 py-2 rounded-[14px] text-[13px] disabled:opacity-50 disabled:pointer-events-none"
         >
           {testing ? "测试中…" : "测试连接"}
         </button>
         {testResult && <p className="mt-2 text-[12px] text-[--text-muted]">{testResult}</p>}
-      </div>
-
-      <div className="sf-glass rounded-2xl p-6">
-        <h2 className="text-[14px] font-semibold text-[--text-primary] mb-4">用户统计</h2>
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div>
-            <p className="text-[22px] font-semibold text-[--text-primary]">{ur?.student ?? "—"}</p>
-            <p className="text-[12px] text-[--text-muted]">学生</p>
-          </div>
-          <div>
-            <p className="text-[22px] font-semibold text-[--text-primary]">{ur?.teacher ?? "—"}</p>
-            <p className="text-[12px] text-[--text-muted]">教师</p>
-          </div>
-          <div>
-            <p className="text-[22px] font-semibold text-[--text-primary]">{ur?.admin ?? "—"}</p>
-            <p className="text-[12px] text-[--text-muted]">管理员</p>
-          </div>
-        </div>
       </div>
     </div>
   );

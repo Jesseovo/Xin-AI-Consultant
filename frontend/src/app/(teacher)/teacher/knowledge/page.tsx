@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { useAuth } from "@/lib/auth-store";
 import { api } from "@/lib/api";
 
@@ -88,32 +88,42 @@ export default function TeacherKnowledgePage() {
     }
   };
 
+  const uploadBoxStyle: CSSProperties = {
+    border: "2px dashed var(--border-warm)",
+    borderRadius: "1rem",
+    boxShadow: "0 0 0 1px rgba(208, 205, 195, 0.22), 0 8px 32px rgba(0, 0, 0, 0.04)",
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-[22px] font-semibold text-[--text-primary]">知识库</h1>
+      <h1 className="text-[22px] font-semibold text-[--text-primary] tracking-tight">知识库</h1>
       <p className="text-[13px] text-[--text-secondary] mt-0.5 mb-6">管理文档与向量切片</p>
 
       {message && (
-        <div className="mb-4 text-[13px] text-[--text-secondary] sf-card px-3 py-2 rounded-xl">{message}</div>
+        <div className="mb-4 text-[13px] text-[--text-secondary] sf-card px-4 py-3 rounded-[20px]">{message}</div>
       )}
 
-      <form onSubmit={createKb} className="sf-glass rounded-2xl p-5 mb-8 flex flex-col sm:flex-row gap-3">
+      <form onSubmit={createKb} className="sf-glass rounded-[20px] p-5 mb-8 flex flex-col sm:flex-row gap-3">
         <input
           className="sf-input flex-1 px-4 py-3 text-[15px]"
           placeholder="新知识库名称"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <button type="submit" className="px-5 py-3 rounded-xl bg-[--accent] text-[--accent-text] text-[14px] font-medium shrink-0">
+        <button type="submit" className="sf-btn-primary px-5 py-3 rounded-[14px] text-[14px] font-medium shrink-0">
           创建
         </button>
       </form>
 
       <div
-        className={`sf-card rounded-2xl p-8 mb-8 text-center border-2 border-dashed transition-colors ${
-          dragOver ? "border-[--accent]/50 bg-[--accent]/5" : "border-[--border-subtle]"
+        className={`p-8 mb-8 text-center transition-colors backdrop-blur-sm ${
+          dragOver ? "bg-[--accent]/6" : "bg-[--bg-card]/50"
         }`}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        style={uploadBoxStyle}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
         onDragLeave={() => setDragOver(false)}
         onDrop={(e) => {
           e.preventDefault();
@@ -122,7 +132,7 @@ export default function TeacherKnowledgePage() {
         }}
       >
         <img src="/images/teacher/upload-guide.png" alt="" className="w-20 h-20 mx-auto mb-3 object-contain" />
-        <p className="text-[14px] text-[--text-primary] font-medium">拖放文件到此处上传</p>
+        <p className="text-[14px] text-[--text-primary] font-medium tracking-tight">拖放文件到此处上传</p>
         <p className="text-[12px] text-[--text-muted] mt-1">或选择文件（将关联到列表中的第一个知识库）</p>
         <label className="mt-4 inline-block">
           <input
@@ -131,32 +141,28 @@ export default function TeacherKnowledgePage() {
             className="hidden"
             onChange={(e) => e.target.files && void uploadFiles(e.target.files)}
           />
-          <span className="cursor-pointer px-4 py-2 rounded-xl bg-[--chip-bg] border border-[--chip-border] text-[13px] text-[--text-secondary]">
+          <span className="cursor-pointer sf-btn-secondary px-4 py-2 rounded-[14px] text-[13px] text-[--text-secondary] inline-block">
             {uploading ? "上传中…" : "选择文件"}
           </span>
         </label>
       </div>
 
       {list.length === 0 && (
-        <div className="sf-card rounded-2xl p-8 text-center mb-4">
+        <div className="sf-card rounded-[20px] p-8 text-center mb-4">
           <img src="/images/platform/empty-kb.png" alt="" className="w-24 h-24 mx-auto mb-4 object-contain" />
           <p className="text-[14px] text-[--text-secondary]">暂无知识库，请创建一个</p>
         </div>
       )}
       <ul className="space-y-3">
         {list.map((kb) => (
-          <li key={kb.id} className="sf-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <li key={kb.id} className="sf-card rounded-[20px] p-4 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[15px] font-medium text-[--text-primary]">{kb.name}</p>
+              <p className="text-[15px] font-medium text-[--text-primary] tracking-tight">{kb.name}</p>
               <p className="text-[12px] text-[--text-muted] mt-0.5">
                 {kb.doc_count} 个文档 · {kb.chunk_count} 个切片
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => void deleteKb(kb.id)}
-              className="text-[13px] text-red-500 hover:underline"
-            >
+            <button type="button" onClick={() => void deleteKb(kb.id)} className="sf-btn-danger text-[13px] px-4 py-2 rounded-[12px]">
               删除
             </button>
           </li>
