@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(s.user);
       setAccessToken(s.accessToken);
       api.setToken(s.accessToken);
-    } else {
+    } else if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
       setUser(DEMO_USER);
       setAccessToken("demo-token");
     }

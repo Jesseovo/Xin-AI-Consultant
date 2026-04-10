@@ -15,7 +15,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    admin_password: str = "admin123"
+    admin_password: str = ""
 
     # 数据库模式：sqlite（默认，零依赖）或 mysql
     db_backend: str = "sqlite"
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     db_port: int = 3306
     db_name: str = "xin_ai"
     db_user: str = "xin_user"
-    db_password: str = "xin_pass_2026"
+    db_password: str = ""
 
     # Redis
     redis_host: str = "127.0.0.1"
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     ollama_model: str = "qwen2.5:3b"
 
     # JWT
-    jwt_secret_key: str = "change-this-to-a-random-string-in-production"
+    jwt_secret_key: str = ""
     jwt_access_token_expire_minutes: int = 30
     jwt_refresh_token_expire_days: int = 7
 

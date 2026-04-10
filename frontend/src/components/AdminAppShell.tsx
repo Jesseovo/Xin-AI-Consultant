@@ -8,10 +8,10 @@ import { useTheme } from "@/lib/theme";
 import { IconCpu, IconLogOut, IconMenu, IconMoon, IconSettings, IconSparkles, IconSun, IconUsers, IconX } from "@/components/ui-icons";
 
 const NAV = [
-  { href: "/admin", label: "总览", Icon: IconSparkles, end: true },
-  { href: "/admin/config", label: "系统配置", Icon: IconSettings },
-  { href: "/admin/users", label: "用户", Icon: IconUsers },
-  { href: "/admin/models", label: "模型", Icon: IconCpu },
+  { href: "/admin" as const, label: "总览", Icon: IconSparkles, end: true },
+  { href: "/admin/config" as const, label: "系统配置", Icon: IconSettings, end: false },
+  { href: "/admin/users" as const, label: "用户", Icon: IconUsers, end: false },
+  { href: "/admin/models" as const, label: "模型", Icon: IconCpu, end: false },
 ] as const;
 
 function ThemeToggleBtn() {

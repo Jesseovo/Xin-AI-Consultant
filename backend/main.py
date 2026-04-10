@@ -1,7 +1,9 @@
 """FastAPI 后端入口"""
+import hashlib
 import sys
 import os
 import logging
+import time
 import json
 import asyncio
 from collections.abc import AsyncIterator
@@ -45,9 +47,11 @@ app.add_middleware(
 )
 
 
+_active_admin_tokens: set[str] = set()
+
+
 def verify_admin(x_admin_token: str = Header(default="")):
-    admin_pw = os.getenv("ADMIN_PASSWORD", "admin123")
-    if not x_admin_token or x_admin_token != admin_pw:
+    if not x_admin_token or x_admin_token not in _active_admin_tokens:
         raise HTTPException(status_code=401, detail="管理员密码错误")
 
 
@@ -172,10 +176,12 @@ async def chat_stream(req: ChatRequest):
 
 @app.post("/api/admin/login")
 async def admin_login(req: AdminLoginRequest):
-    admin_pw = os.getenv("ADMIN_PASSWORD", "admin123")
+    admin_pw = os.getenv("ADMIN_PASSWORD", "")
     if req.password != admin_pw:
         raise HTTPException(status_code=401, detail="密码错误")
-    return {"token": admin_pw, "message": "登录成功"}
+    token = hashlib.sha256(f"{admin_pw}:{time.time()}".encode()).hexdigest()
+    _active_admin_tokens.add(token)
+    return {"token": token, "message": "登录成功"}
 
 
 @app.get("/api/admin/config")

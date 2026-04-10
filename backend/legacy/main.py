@@ -46,7 +46,7 @@ app.add_middleware(
 
 
 def verify_admin(x_admin_token: str = Header(default="")):
-    admin_pw = os.getenv("ADMIN_PASSWORD", "admin123")
+    admin_pw = os.getenv("ADMIN_PASSWORD", "")
     if not x_admin_token or x_admin_token != admin_pw:
         raise HTTPException(status_code=401, detail="管理员密码错误")
 
@@ -172,7 +172,7 @@ async def chat_stream(req: ChatRequest):
 
 @app.post("/api/admin/login")
 async def admin_login(req: AdminLoginRequest):
-    admin_pw = os.getenv("ADMIN_PASSWORD", "admin123")
+    admin_pw = os.getenv("ADMIN_PASSWORD", "")
     if req.password != admin_pw:
         raise HTTPException(status_code=401, detail="密码错误")
     return {"token": admin_pw, "message": "登录成功"}

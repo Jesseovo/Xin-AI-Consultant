@@ -131,7 +131,7 @@ export default function TeacherKnowledgePage() {
           void uploadFiles(e.dataTransfer.files);
         }}
       >
-        <img src="/images/teacher/upload-guide.png" alt="" className="w-20 h-20 mx-auto mb-3 object-contain" />
+        <img src="/images/teacher/upload-guide.png" alt="" className="w-full max-w-sm mx-auto mb-4 rounded-[16px] object-contain" />
         <p className="text-[14px] text-[--text-primary] font-medium tracking-tight">拖放文件到此处上传</p>
         <p className="text-[12px] text-[--text-muted] mt-1">或选择文件（将关联到列表中的第一个知识库）</p>
         <label className="mt-4 inline-block">

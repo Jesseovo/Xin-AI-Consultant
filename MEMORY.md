@@ -83,7 +83,7 @@ data: {"type": "done"}
 
 ## 鉴权机制
 
-- 管理员密码配在 `.env` 的 `ADMIN_PASSWORD` 字段（默认 admin123）
+- 管理员密码配在 `.env` 的 `ADMIN_PASSWORD` 字段（无默认值，必须配置）
 - 前端 `/admin` 页面先调 `POST /api/admin/login` 获取 token
 - 后续管理 API 请求通过 `X-Admin-Token` Header 携带 token
 - token 存在前端 localStorage，退出登录时清除

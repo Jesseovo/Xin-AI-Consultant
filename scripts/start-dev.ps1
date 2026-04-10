@@ -9,7 +9,8 @@ $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
 
 $mysqlContainer = "xin-mysql"
-$mysqlRootPassword = "xin_root_2026"
+$mysqlRootPassword = $env:MYSQL_ROOT_PASSWORD
+if (-not $mysqlRootPassword) { $mysqlRootPassword = "changeme" }
 
 Write-Host ""
 Write-Host "======== 夹心 开发环境 ========" -ForegroundColor Cyan

@@ -6,10 +6,10 @@ services:
     container_name: xin-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: xin_root_2026
-      MYSQL_DATABASE: xin_ai
-      MYSQL_USER: xin_user
-      MYSQL_PASSWORD: xin_pass_2026
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      MYSQL_DATABASE: ${DB_NAME:-xin_ai}
+      MYSQL_USER: ${DB_USER:-xin_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-changeme}
     ports:
       - "3306:3306"
     volumes:
